@@ -1,0 +1,331 @@
+/*
+ * Satıcılar ekranının öz üslubları.
+ *
+ * Yalnız bu ekranda olan üç şey burada yaşayır: müqayisə cədvəlinin ikimərtəbəli
+ * xanası (böyük faiz + altında xam say + komanda fərqi), gün növü cədvəlinin
+ * qruplaşmış sütunları və istilik xəritəsi. Qalan hər şey ui/ primitivlərindən
+ * gəlir.
+ */
+
+/* Cədvəl ÖZ qabında sürüşür — səhifə gövdəsi heç vaxt üfüqi sürüşmür
+   (docs/rules.md §14). */
+.tableScroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-small);
+}
+
+.table th,
+.table td {
+  padding: var(--space-5) var(--space-6);
+  text-align: left;
+  border-bottom: var(--hairline) solid var(--line-soft);
+  white-space: nowrap;
+  vertical-align: top;
+}
+
+.table thead th {
+  color: var(--text-faint);
+  font-size: var(--text-tiny);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  border-bottom: var(--hairline) solid var(--line);
+}
+
+.table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.num {
+  text-align: right;
+  font-family: var(--font-numeric);
+  font-variant-numeric: tabular-nums;
+}
+
+.name {
+  color: var(--text-strong);
+  font-weight: var(--weight-semibold);
+}
+
+.nameSub {
+  color: var(--text-faint);
+  font-size: var(--text-tiny);
+  font-weight: var(--weight-regular);
+  margin-top: var(--space-1);
+}
+
+/* Böyük dəyər + altında onu izah edən xam say. Faiz həcmi gizlədir, xam say
+   onu geri qaytarır — ikisi bir xanada duranda heç biri o birini əvəz etmir. */
+.value {
+  color: var(--text-strong);
+  font-size: var(--text-title);
+  font-family: var(--font-numeric);
+  font-variant-numeric: tabular-nums;
+}
+
+.raw {
+  color: var(--text-faint);
+  font-size: var(--text-tiny);
+  font-family: var(--font-numeric);
+  font-variant-numeric: tabular-nums;
+  margin-top: var(--space-1);
+}
+
+/* Komanda medianından fərq. Rəng tək daşıyıcı deyil: işarə (▲/▼) və title
+   mətni eyni şeyi deyir (docs/rules.md §3). */
+.delta {
+  display: inline-block;
+  font-size: var(--text-tiny);
+  font-family: var(--font-numeric);
+  font-variant-numeric: tabular-nums;
+  margin-top: var(--space-1);
+  color: var(--text-faint);
+}
+
+.delta[data-tone="worse"] { color: var(--critical); }
+.delta[data-tone="better"] { color: var(--positive); }
+
+.missing {
+  color: var(--text-faint);
+  font-size: var(--text-tiny);
+}
+
+.chip {
+  display: inline-block;
+  padding: var(--space-1) var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--panel-sunken);
+  color: var(--text-muted);
+  font-size: var(--text-micro);
+  white-space: nowrap;
+}
+
+/* Gün növü cədvəlinin qrup başlıqları: üç sütunluq blok bir başlıq altında. */
+.groupHead {
+  text-align: center !important;
+  border-left: var(--hairline) solid var(--line);
+}
+
+.groupStart {
+  border-left: var(--hairline) solid var(--line);
+}
+
+.note {
+  color: var(--text-muted);
+  font-size: var(--text-tiny);
+  line-height: var(--leading-normal);
+  padding: var(--space-6) var(--space-8);
+  border-top: var(--hairline) solid var(--line-soft);
+}
+
+/* ——— İstilik xəritəsi ———
+ *
+ * `--heat-ink` panelin özündən (inline) gəlir: rejimə görə dəyişir və həm
+ * xanalar, həm şkala nümunələri onu miras alır. Ehtiyat dəyər burada durur ki,
+ * komponent onu verməyi unutsa da xana görünməz olmasın.
+ */
+
+.heat {
+  --heat-ink: var(--critical);
+  border-collapse: separate;
+  border-spacing: var(--space-1);
+  font-family: var(--font-numeric);
+  font-variant-numeric: tabular-nums;
+}
+
+.heat th {
+  color: var(--text-faint);
+  font-size: var(--text-micro);
+  font-weight: var(--weight-regular);
+  padding: 0 var(--space-3);
+  white-space: nowrap;
+}
+
+.heat thead th {
+  text-align: center;
+}
+
+.heat tbody th {
+  text-align: right;
+}
+
+.cell {
+  width: var(--space-11);
+  height: var(--space-10);
+  border-radius: var(--radius-xs);
+  background: var(--panel-sunken);
+  color: var(--text-body);
+  font-size: var(--text-micro);
+  text-align: center;
+  /* Səviyyə fon rəngi ilə verilir, mətn isə həmişə oxunaqlı qalır. */
+  --level: 0;
+  background-color: color-mix(in srgb, var(--heat-ink) calc(var(--level) * 1%), var(--panel-sunken));
+}
+
+.cell[data-thin="true"] {
+  color: var(--text-faint);
+  background-image: repeating-linear-gradient(
+    45deg, transparent, transparent 3px,
+    color-mix(in srgb, var(--text-faint) 25%, transparent) 3px,
+    color-mix(in srgb, var(--text-faint) 25%, transparent) 4px);
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  padding: var(--space-6) var(--space-8) 0;
+  color: var(--text-faint);
+  font-size: var(--text-tiny);
+}
+
+.legendSwatch {
+  --heat-ink: var(--critical);
+  display: inline-block;
+  width: var(--space-9);
+  height: var(--space-5);
+  border-radius: var(--radius-xs);
+  background-color: color-mix(in srgb, var(--heat-ink) calc(var(--level) * 1%), var(--panel-sunken));
+}
+
+@media (max-width: 860px) {
+  .table th,
+  .table td {
+    padding: var(--space-4);
+  }
+}
+
+/* Açılıb-yığılan izah bölməsi. Rəqəm izahsız qalmır (docs/rules.md §4), amma
+   izah həmişə açıq durmamalıdır — cədvəldən yuxarı qalxıb onu itələyərdi. */
+.glossary {
+  border-top: var(--hairline) solid var(--line-soft);
+  padding: var(--space-6) var(--space-8);
+  font-size: var(--text-tiny);
+  color: var(--text-muted);
+}
+
+.glossary > summary {
+  cursor: pointer;
+  color: var(--text-body);
+  font-size: var(--text-small);
+  padding: var(--space-2) 0;
+}
+
+.glossary dl {
+  margin: var(--space-5) 0 0;
+  display: grid;
+  gap: var(--space-5);
+}
+
+.glossary dt {
+  color: var(--text-strong);
+  font-weight: var(--weight-semibold);
+}
+
+.glossary dd {
+  margin: var(--space-1) 0 0;
+  line-height: var(--leading-normal);
+  max-width: var(--reading-max);
+}
+
+/* ——— Faktlar lenti ——— */
+
+.insights {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.insight {
+  display: flex;
+  gap: var(--space-6);
+  padding: var(--space-7) var(--space-8);
+  border-bottom: var(--hairline) solid var(--line-soft);
+}
+
+.insight:last-child {
+  border-bottom: 0;
+}
+
+/* İstiqamət: işarə + söz. Söz olmadan rəng tək daşıyıcı olardı. */
+.insightMark {
+  flex: none;
+  width: var(--space-13);
+  text-align: center;
+  font-family: var(--font-numeric);
+  color: var(--text-muted);
+}
+
+.insightMark[data-tone="worse"] { color: var(--critical); }
+.insightMark[data-tone="better"] { color: var(--positive); }
+
+.insightWord {
+  display: block;
+  font-size: var(--text-micro);
+  color: var(--text-faint);
+  margin-top: var(--space-1);
+}
+
+.insightBody {
+  min-width: 0;
+}
+
+.insightHead {
+  color: var(--text-strong);
+  font-size: var(--text-title);
+  font-weight: var(--weight-semibold);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.insightText {
+  margin: var(--space-3) 0 0;
+  color: var(--text-body);
+  font-size: var(--text-small);
+  line-height: var(--leading-normal);
+  max-width: var(--reading-max);
+}
+
+/* Faktın altındakı quru rəqəm sətri — cümlə ilə rəqəm yan-yana durmalıdır. */
+.insightBasis {
+  margin: var(--space-4) 0 0;
+  padding: var(--space-4) var(--space-5);
+  background: var(--panel-sunken);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: var(--text-tiny);
+  font-family: var(--font-numeric);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--leading-normal);
+}
+
+.insightBasisLabel {
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  font-size: var(--text-micro);
+}
+
+@media (max-width: 860px) {
+  .insight {
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  .insightMark {
+    width: auto;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .insightWord { margin-top: 0; }
+}

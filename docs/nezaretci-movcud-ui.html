@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="az">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nəzarətçi lenti — indiki UI</title>
+
+<!--
+  Nəzarətçi lentinin İNDİKİ görünüşü, real məlumatla (25 avqust 2026).
+
+  Bu fayl brauzerdə açılan tək fayllıq surətdir: aşağıdakı CSS dashboard-un
+  öz `src/app/dashboard.module.css` faylından götürülüb (yalnız bu ekrana aid
+  hissə), markup isə `src/components/SupervisorFeed.tsx` render etdiyinin
+  eynisidir. Dizayn üçün başlanğıc nöqtəsi budur — üstündə sərbəst işləyin.
+
+  Sinif adlarını dəyişmək sərbəstdir; saxlanılmalı olan struktur və məlumat
+  sahələri `nezaretci-dizayn-brief.md` faylındadır.
+-->
+
+<style>
+/* ---- globals.css: tema tokenləri (bütün dashboard bunlarla işləyir) ---- */
+:root {
+  --bg: #0b0d0f;
+  --surface: #14171a;
+  --surface-2: #1b1f23;
+  --border: #262b30;
+  --fg: #eef1f3;
+  --muted: #8b949c;
+  --accent: #35d07f;
+  --accent-2: #5b8def;
+  --danger: #f2555a;
+}
+
+html { color-scheme: dark; }
+* { box-sizing: border-box; padding: 0; margin: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+table { border-collapse: collapse; width: 100%; }
+
+/* ---- dashboard.module.css: səhifə karkası ---- */
+.page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px 22px 60px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 26px;
+}
+
+.brand { font-size: 20px; font-weight: 600; }
+
+.subtitle {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.logoutButton {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--fg);
+  font-size: 13px;
+  padding: 7px 12px;
+  cursor: pointer;
+}
+
+.section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin-bottom: 24px;
+}
+
+.sectionTitle {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.empty {
+  color: var(--muted);
+  font-size: 13px;
+  padding: 12px 0;
+}
+
+.footer {
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+  margin-top: 8px;
+}
+
+.jid { color: var(--muted); font-size: 11px; }
+
+.chatLink {
+  color: var(--fg);
+  border-bottom: 1px dotted var(--muted);
+}
+.chatLink:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ---- lent: söhbət qabarcıqları ---- */
+.transcript {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 460px;
+  overflow-y: auto;
+  padding: 4px 2px;
+}
+
+.bubbleInRow { display: flex; justify-content: flex-start; }
+
+.bubbleIn {
+  max-width: min(78%, 560px);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  border-bottom-left-radius: 4px;
+  padding: 8px 12px;
+  background: var(--surface-2);
+}
+
+.bubbleSender {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent-2);
+  margin-bottom: 3px;
+}
+
+.bubbleText {
+  font-size: 13px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.bubbleTime {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+/* ---- Nəzarətçiyə aid əlavələr ---- */
+.severityBadge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  white-space: nowrap;
+}
+.severityBadge[data-band="diqqet"] { color: var(--accent-2); border-color: var(--accent-2); }
+.severityBadge[data-band="ciddi"]  { color: var(--danger);   border-color: var(--danger); }
+.severityBadge[data-band="kritik"] {
+  color: var(--danger);
+  border-color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 18%, transparent);
+}
+
+/* Sancaqlanmış (6+, açıq) post */
+.pinnedPost { border-left: 3px solid var(--danger); }
+
+.agentVerdict { font-size: 12px; font-weight: 600; }
+
+.agentMeta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 4px 0;
+}
+
+.agentReason {
+  color: var(--muted);
+  font-size: 11px;
+  font-style: italic;
+  margin-top: 3px;
+}
+
+.pillLink {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 12px;
+  color: var(--fg);
+}
+.pillLink:hover { border-color: var(--accent); color: var(--accent); }
+
+.acceptButton {
+  background: var(--accent);
+  color: #08110c;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.acceptButton:hover { filter: brightness(1.08); }
+
+/* ---- bağlananlar cədvəli ---- */
+.chartScroll { overflow-x: auto; }
+
+.table { font-size: 13px; }
+
+.table th {
+  text-align: left;
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.table tr:last-child td { border-bottom: none; }
+
+/* canlı nöqtə (LiveUpdates komponenti — inline stil işlədir) */
+.live {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.liveDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--accent);
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="header">
+    <div>
+      <div class="brand">🕵️ Nəzarətçi</div>
+      <div class="subtitle">Satış yazışmalarına avtomatik nəzarət — tapıntılar, bayraqlar, sakitlik hesabatları</div>
+    </div>
+    <div class="headerActions">
+      <span class="live"><span class="liveDot"></span>Canlı · 18:06</span>
+      <a class="logoutButton" href="#">← Ana səhifə</a>
+      <a class="logoutButton" href="#">Çıxış</a>
+    </div>
+  </header>
+
+  <!-- ================= ZONA 1 + 2: açıq postlar ================= -->
+  <section class="section">
+    <div class="sectionTitle">
+      🕵️ Nəzarətçi
+      <span style="color: var(--muted); font-weight: 400; font-size: 12px; margin-left: 8px;">son yoxlama 18:06</span>
+    </div>
+
+    <div class="transcript">
+
+      <!-- ---- SANCAQLI: 9 bal, kritik ---- -->
+      <div class="bubbleInRow">
+        <div class="bubbleIn pinnedPost">
+          <div class="bubbleSender">🕵️ Nəzarətçi · Rouz 2 / Rouz-2</div>
+          <div class="agentMeta">
+            <span class="severityBadge" data-band="kritik">9/10</span>
+            <span class="agentVerdict" style="color: var(--danger)">🚩 Müdaxilə lazımdır</span>
+          </div>
+          <div class="bubbleText">Təsdiqlənmiş müştəri 43 saatdan çoxdur cavab gözləyir, hədəf isə cəmi 3 saat idi - bu real gecikmə və müştəri narazılığı riski daşıyır.</div>
+          <div class="agentMeta">
+            <a class="pillLink" href="#">Söhbətə bax</a>
+            <button class="acceptButton" type="submit">Həll edildi</button>
+          </div>
+          <div class="bubbleTime">18:06 · 2-ci dəfə görülür</div>
+        </div>
+      </div>
+
+      <div class="bubbleInRow">
+        <div class="bubbleIn pinnedPost">
+          <div class="bubbleSender">🕵️ Nəzarətçi · Rouz 2 / Rouz-2</div>
+          <div class="agentMeta">
+            <span class="severityBadge" data-band="kritik">9/10</span>
+            <span class="agentVerdict" style="color: var(--danger)">🚩 Müdaxilə lazımdır</span>
+          </div>
+          <div class="bubbleText">Bu müştəri artıq 28 saatdan çoxdur cavab gözləyir, halbuki bu tip müraciətlərə 1 saat ərzində dönüş verilməlidir. Müştəri statusu təsdiqlənib, yəni real satış itkisi riski var.</div>
+          <div class="agentMeta">
+            <a class="pillLink" href="#">Söhbətə bax</a>
+            <button class="acceptButton" type="submit">Həll edildi</button>
+          </div>
+          <div class="bubbleTime">18:06 · 2-ci dəfə görülür</div>
+        </div>
+      </div>
+
+      <!-- ---- SANCAQLI: 8 bal, ciddi ---- -->
+      <div class="bubbleInRow">
+        <div class="bubbleIn pinnedPost">
+          <div class="bubbleSender">🕵️ Nəzarətçi · Rouz / Rouz</div>
+          <div class="agentMeta">
+            <span class="severityBadge" data-band="ciddi">8/10</span>
+            <span class="agentVerdict" style="color: var(--danger)">🚩 Müdaxilə lazımdır</span>
+          </div>
+          <div class="bubbleText">Mövcud müştəri 2 gün 4 saatdır bizdən cavab gözləyir və hələ heç bir reaksiya verilməyib. Bu münasibətin soyuması riskini yaradan ciddi gecikmədir.</div>
+          <div class="agentMeta">
+            <a class="pillLink" href="#">Söhbətə bax</a>
+            <button class="acceptButton" type="submit">Həll edildi</button>
+          </div>
+          <div class="bubbleTime">18:05 · 2-ci dəfə görülür</div>
+        </div>
+      </div>
+
+      <div class="bubbleInRow">
+        <div class="bubbleIn pinnedPost">
+          <div class="bubbleSender">🕵️ Nəzarətçi · Rouz / Rouz</div>
+          <div class="agentMeta">
+            <span class="severityBadge" data-band="ciddi">8/10</span>
+            <span class="agentVerdict" style="color: var(--danger)">🚩 Müdaxilə lazımdır</span>
+          </div>
+          <div class="bubbleText">Mövcud müştəri (nömrəsi 971500000007) təxminən 7 saatdır bizdən cavab gözləyir, hədəf vaxt keçib. Bu real müştəri olduğu üçün gecikmə diqqət tələb edir.</div>
+          <div class="agentMeta">
+            <a class="pillLink" href="#">Söhbətə bax</a>
+            <button class="acceptButton" type="submit">Həll edildi</button>
+          </div>
+          <div class="bubbleTime">18:05 · 2-ci dəfə görülür</div>
+        </div>
+      </div>
+
+      <!-- ---- SANCAQLI: 6 bal, sərhəd ---- -->
+      <div class="bubbleInRow">
+        <div class="bubbleIn pinnedPost">
+          <div class="bubbleSender">🕵️ Nəzarətçi · Rouz / Rouz</div>
+          <div class="agentMeta">
+            <span class="severityBadge" data-band="ciddi">6/10</span>
+            <span class="agentVerdict" style="color: var(--danger)">🚩 Müdaxilə lazımdır</span>
+          </div>
+          <div class="bubbleText">Bu müştəri (potensial, hələ müştəri deyil) 2 gün 19 saatdır qərar gözləyir, son mesajından bəri heç bir hərəkət olmayıb. Bu ən uzun gözləmə vaxtıdır və satış şansının sönməsi riski var.</div>
+          <div class="agentMeta">
+            <a class="pillLink" href="#">Söhbətə bax</a>
+            <button class="acceptButton" type="submit">Həll edildi</button>
+          </div>
+          <div class="bubbleTime">18:05 · 2-ci dəfə görülür</div>
+        </div>
+      </div>
+
+      <!-- ---- İZLƏMƏDƏ: 5 bal, siyahı postu (söhbətə bağlı deyil) ---- -->
+      <div class="bubbleInRow">
+        <div class="bubbleIn">
+          <div class="bubbleSender">🕵️ Nəzarətçi · Rouz / Rouz</div>
+          <div class="agentMeta">
+            <span class="severityBadge" data-band="diqqet">5/10</span>
+            <span class="agentVerdict" style="color: var(--accent)">✅ Yaxşı gedir</span>
+          </div>
+          <div class="bubbleText">62 söhbətdə (42-si mövcud müştəri) müştərilər hələ qərar vermək mərhələsindədir, ən köhnəsi 13 gün 22 saatdır gözləyir. Bu böyük siyahı satış boru xəttinin donduğunu göstərir və vaxtında təkrar əlaqə tələb edir.</div>
+          <div class="agentMeta">
+            <a class="pillLink" href="#">Səhifəyə bax</a>
+            <button class="acceptButton" type="submit">Həll edildi</button>
+          </div>
+          <div class="bubbleTime">18:05 · 2-ci dəfə görülür</div>
+        </div>
+      </div>
+
+      <div class="bubbleInRow">
+        <div class="bubbleIn">
+          <div class="bubbleSender">🕵️ Nəzarətçi · Rouz 2 / Rouz-2</div>
+          <div class="agentMeta">
+            <span class="severityBadge" data-band="diqqet">5/10</span>
+            <span class="agentVerdict" style="color: var(--accent)">✅ Yaxşı gedir</span>
+          </div>
+          <div class="bubbleText">45 müştəri qərar gözləmə mərhələsində qalıb, onlardan 36-sı təsdiqlənmiş müştəridir, ən köhnəsi isə 14 gündür cavab gözləyir. Bu, satışların uzun müddət dondurulmuş qalmasına səbəb olur.</div>
+          <div class="agentMeta">
+            <a class="pillLink" href="#">Səhifəyə bax</a>
+            <button class="acceptButton" type="submit">Həll edildi</button>
+          </div>
+          <div class="bubbleTime">18:06 · 2-ci dəfə görülür</div>
+        </div>
+      </div>
+
+      <!-- ---- Şablon mətnli post (model alınmayanda belə görünür) ---- -->
+      <div class="bubbleInRow">
+        <div class="bubbleIn">
+          <div class="bubbleSender">🕵️ Nəzarətçi · Rouz 2 / Rouz-2</div>
+          <div class="agentMeta">
+            <span class="severityBadge" data-band="diqqet">4/10</span>
+            <span class="agentVerdict" style="color: var(--accent)">✅ Yaxşı gedir</span>
+          </div>
+          <div class="bubbleText">Nümunə Mağaza Nömrəsi 20 saat 39 dəq cavab gözləyir (hədəf: 2 saat), 2 mesaj yazıb.</div>
+          <div class="agentReason">Bal düzəlişi: söhbət texniki xarakterlidir, real satış riski görünmür.</div>
+          <div class="agentMeta">
+            <a class="pillLink" href="#">Söhbətə bax</a>
+            <button class="acceptButton" type="submit">Həll edildi</button>
+          </div>
+          <div class="bubbleTime">18:06 · şablon</div>
+        </div>
+      </div>
+
+      <!-- ---- "Hər şey qaydasındadır" postu (bal nişanı və verdikt YOXDUR) ---- -->
+      <div class="bubbleInRow">
+        <div class="bubbleIn">
+          <div class="bubbleSender">🕵️ Nəzarətçi · Rouz 2 / Rouz-2</div>
+          <div class="bubbleText">Son 2 saatda Rouz 2 üçün hər şey qaydasındadır — 14 gələn, 11 gedən mesaj, 6 aktiv söhbət. Ən çox yazışdığı: Nümunə Butik Couture (9 mesaj). Median cavab sürəti 4 dəq.</div>
+          <div class="agentMeta">
+            <a class="pillLink" href="#">Səhifəyə bax</a>
+            <button class="acceptButton" type="submit">Həll edildi</button>
+          </div>
+          <div class="bubbleTime">16:05</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= ZONA 3: bağlananlar ================= -->
+  <section class="section">
+    <div class="sectionTitle">Bağlananlar</div>
+    <div class="chartScroll">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Söhbət</th>
+            <th>Kim</th>
+            <th>Bal</th>
+            <th>Necə bağlandı</th>
+            <th>Vaxt</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a class="chatLink" href="#">Nümunə Müştəri</a></td>
+            <td class="jid">Rouz 2</td>
+            <td><span class="severityBadge" data-band="kritik">9</span></td>
+            <td><span style="color: var(--accent)">✅ Öz-özünə həll olundu</span></td>
+            <td class="jid">13:54</td>
+          </tr>
+          <tr>
+            <td><a class="chatLink" href="#">Nümunə Butik Couture</a></td>
+            <td class="jid">Rouz 2</td>
+            <td><span class="severityBadge" data-band="ciddi">8</span></td>
+            <td><span style="color: var(--accent)">✅ Öz-özünə həll olundu</span></td>
+            <td class="jid">13:54</td>
+          </tr>
+          <tr>
+            <td><a class="chatLink" href="#">100000000000001</a></td>
+            <td class="jid">Rouz 2</td>
+            <td><span class="severityBadge" data-band="kritik">9</span></td>
+            <td><span style="color: var(--accent)">✅ Öz-özünə həll olundu</span></td>
+            <td class="jid">13:54</td>
+          </tr>
+          <tr>
+            <td><a class="chatLink" href="#">Nümunə Mağaza</a></td>
+            <td class="jid">Rouz 2</td>
+            <td><span class="severityBadge" data-band="ciddi">6</span></td>
+            <td><span style="color: var(--muted)">👤 Əl ilə bağlandı</span></td>
+            <td class="jid">12:57</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ================= BOŞ HAL (nümunə üçün) ================= -->
+  <section class="section">
+    <div class="sectionTitle">🕵️ Nəzarətçi <span style="color: var(--muted); font-weight: 400; font-size: 12px; margin-left: 8px;">— boş hal necə görünür</span></div>
+    <div class="empty">Açıq bayraq yoxdur — hər şey qaydasındadır. Yoxlama iş saatlarında saatda bir gəlir.</div>
+  </section>
+
+  <div class="footer">Katibe · Evolution API üzərindən, yalnız oxu rejimində</div>
+
+</div>
+
+</body>
+</html>

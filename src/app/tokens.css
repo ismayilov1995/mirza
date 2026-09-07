@@ -1,0 +1,225 @@
+/*
+ * Katibe dizayn sistemi — tokenlər.
+ *
+ * Claude Design layihəsindən (katibe-design-system-b2d016) gəlir. Dəyərlər
+ * uydurulmayıb: mövcud globals.css və modul CSS-lərindən çıxarılıb, adları
+ * mənalandırılıb. --surface-2 → --panel-raised, --fg-dim → --text-faint.
+ *
+ * KÖHNƏ ADLAR SAXLANILIR. Aşağıdakı alias blokunu silmək olmaz: 1593 sətirlik
+ * dashboard.module.css və 497 sətirlik monitor.module.css hələ də köhnə adlarla
+ * yazılıb. Yeni ekranlar yeni adları, köhnələr köhnəni işlədir, ikisi eyni
+ * dəyərə baxır — yəni rəng bir yerdə dəyişəndə hər ikisində dəyişir. Bu,
+ * "hamısını bir gecədə köçür" variantından ucuzdur və heç nə sındırmır.
+ */
+
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* — Səthlər. Dörd dərinlik: səhifə fonu → panel → qalxmış → çökmüş — */
+  --canvas: #0b0d0f;
+  --panel: #14171a;
+  --panel-raised: #1b1f23;
+  --panel-sunken: #101316;
+  --overlay-scrim: rgba(0, 0, 0, 0.55);
+
+  /* — Xətlər. İki qalınlıq: qab haşiyəsi və sıra ayırıcısı — */
+  --line: #262b30;
+  --line-soft: #1e2226;
+
+  /* — Mətn. Dörd pillə: başlıq → gövdə → ikinci dərəcəli → etiket/vaxt — */
+  --text-strong: #eef1f3;
+  --text-body: #a7b0b8;
+  --text-muted: #8b949c;
+  --text-faint: #6f7a82;
+
+  /* — Brend. Yaşıl qəsdən qalır: məhsul WhatsApp yazışmalarının üstündə
+       oturur və o assosiasiya doğrudur — */
+  --brand: #35d07f;
+  --brand-ink: #08110c;
+  --brand-soft: color-mix(in srgb, var(--brand) 14%, transparent);
+  --brand-line: color-mix(in srgb, var(--brand) 35%, var(--line));
+
+  /* — Status — */
+  --critical: #f2555a;
+  --serious: #e8a13a;
+  --info: #5b8def;
+  --positive: #35d07f;
+
+  --critical-soft: color-mix(in srgb, var(--critical) 12%, transparent);
+  --serious-soft: color-mix(in srgb, var(--serious) 12%, transparent);
+  --info-soft: color-mix(in srgb, var(--info) 12%, transparent);
+
+  /* — Bal zolaqları (severity 1-10) — */
+  --band-kritik: var(--critical);
+  --band-ciddi: var(--serious);
+  --band-diqqet: var(--info);
+  --band-melumat: var(--line);
+
+  /* — Vəziyyət — */
+  --hover-line: var(--brand);
+  --focus-ring: color-mix(in srgb, var(--brand) 55%, transparent);
+  --selection-bg: var(--brand);
+  --selection-fg: var(--brand-ink);
+  --disabled-opacity: 0.45;
+
+  /* — Söhbət baloncuqları — */
+  --bubble-in-bg: var(--panel-raised);
+  --bubble-in-line: var(--line);
+  --bubble-out-bg: color-mix(in srgb, var(--brand) 14%, var(--panel-raised));
+  --bubble-out-line: color-mix(in srgb, var(--brand) 35%, var(--line));
+  --bubble-sender: var(--info);
+
+  /* — Tipografiya. Webfont yoxdur: panel gündə saatlarla açıq qalır, sistem
+       şrifti sıfır yük və Azərbaycan diakritikləri üçün tam əhatə deməkdir — */
+  --font-ui:
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+    "Noto Sans", sans-serif;
+  --font-numeric: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --text-micro: 10px;
+  --text-tiny: 11px;
+  --text-small: 12px;
+  --text-body-size: 13px;
+  --text-reading: 14px;
+  --text-title: 15px;
+  --text-heading: 18px;
+  --text-display: 22px;
+  --text-metric: 26px;
+
+  --leading-tight: 1.2;
+  --leading-snug: 1.45;
+  --leading-normal: 1.55;
+  --leading-loose: 1.7;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  --tracking-caps: 0.05em;
+  --tracking-tight: -0.01em;
+
+  /* — Boşluq. 2px addımlı sıx şəbəkə: panel yüzlərlə sıra göstərir, ona görə
+       şkala 8px-lik "havalı" sistem deyil — */
+  --space-1: 2px;
+  --space-2: 4px;
+  --space-3: 6px;
+  --space-4: 8px;
+  --space-5: 10px;
+  --space-6: 12px;
+  --space-7: 14px;
+  --space-8: 16px;
+  --space-9: 20px;
+  --space-10: 24px;
+  --space-11: 32px;
+  --space-12: 40px;
+  --space-13: 64px;
+
+  --pad-row: var(--space-6) var(--space-7);
+  --pad-panel: var(--space-9);
+  --pad-card: var(--space-8);
+  --pad-control: var(--space-4) var(--space-7);
+  --pad-control-sm: var(--space-3) var(--space-5);
+
+  --sidebar-width: 232px;
+  --content-max: 1160px;
+  --reading-max: 640px;
+  --topbar-height: 52px;
+  --tap-target: 44px;
+
+  /* — Künc, kölgə, kənar — */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 14px;
+  --radius-pill: 999px;
+
+  --border-width: 1px;
+  --rail-width: 3px;
+
+  /* Kölgə yalnız üzən səthlərdə. Panel və kartlar kölgəsizdir — dərinlik
+     səth rəngi və haşiyə ilə verilir. */
+  --shadow-modal: 0 20px 60px color-mix(in srgb, black 40%, transparent);
+  --shadow-popover: 0 8px 24px color-mix(in srgb, black 32%, transparent);
+  --shadow-active-row: inset 2px 0 0 var(--brand);
+  --shadow-nav-active: inset 3px 0 0 var(--brand);
+
+  /* — Hərəkət. Panel iş alətidir: animasiya yalnız vəziyyət dəyişikliyini
+       izah edəndə var. Sıçrayış və giriş animasiyası yoxdur — */
+  --duration-instant: 90ms;
+  --duration-fast: 150ms;
+  --duration-slow: 240ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0.2, 1);
+
+  --spin-duration: 0.7s;
+  --spin-duration-lg: 0.8s;
+  --pulse-duration: 2.4s;
+
+  /* — Köhnə adlar. Silmək olmaz, yuxarıdakı izaha bax — */
+  --bg: var(--canvas);
+  --surface: var(--panel);
+  --surface-2: var(--panel-raised);
+  --border: var(--line);
+  --fg: var(--text-strong);
+  --muted: var(--text-muted);
+  --accent: var(--brand);
+  --accent-2: var(--info);
+  --danger: var(--critical);
+  --warn: var(--serious);
+  --fg-soft: var(--text-body);
+  --fg-dim: var(--text-faint);
+  --inset: var(--panel-sunken);
+  --hairline: var(--line-soft);
+}
+
+/*
+ * İşıqlı tema.
+ *
+ * Yalnız [data-theme="light"] altında — sistem tercihinə (prefers-color-scheme)
+ * bağlanmır. Səbəb: panel gecə-gündüz açıq qalan iş alətidir və işıqlı rejimə
+ * keçid istifadəçinin qərarı olmalıdır, noutbukun saatının yox. Yarısı işıqlı,
+ * yarısı tünd ekran isə oxunmur.
+ */
+[data-theme="light"] {
+  color-scheme: light;
+
+  --canvas: #f4f6f7;
+  --panel: #ffffff;
+  --panel-raised: #f1f3f5;
+  --panel-sunken: #eceff1;
+  --overlay-scrim: rgba(16, 21, 26, 0.38);
+  /* Tünd fonda 40% qara kölgə görünmür; ağ fonda isə ağır olur. */
+  --shadow-modal: 0 20px 60px color-mix(in srgb, #10151a 22%, transparent);
+  --shadow-popover: 0 8px 24px color-mix(in srgb, #10151a 16%, transparent);
+
+  --line: #dde2e6;
+  --line-soft: #e9edef;
+
+  --text-strong: #10151a;
+  --text-body: #3d474f;
+  --text-muted: #667079;
+  --text-faint: #838d95;
+
+  /*
+   * Ağ üzərində #35d07f oxunmur — brend tonu tündləşir, sıçrayış rəngi yox.
+   *
+   * Dəyərlər ölçülüb, seçilməyib: hər biri WCAG AA hədləri (adi mətn üçün
+   * 4.5, iri/köməkçi mətn üçün 3.0) təmin edən ən açıq ton kimi hesablanıb.
+   * İlk cəhd #0f9d57 idi və ağ mətnlə cəmi 3.51 verirdi — yaşıl düymənin
+   * üstündəki yazı işıqlı rejimdə solğun görünürdü.
+   */
+  --brand: #0d884b;
+  --brand-ink: #ffffff;
+
+  --critical: #cf2f37;
+  --serious: #9e6b0a;
+  --info: #2b62c4;
+  --positive: #0d884b;
+
+  --bubble-in-bg: #ffffff;
+  --bubble-in-line: var(--line);
+  --bubble-out-bg: color-mix(in srgb, var(--brand) 10%, #ffffff);
+  --bubble-out-line: color-mix(in srgb, var(--brand) 30%, var(--line));
+}

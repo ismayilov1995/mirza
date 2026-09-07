@@ -1,0 +1,1892 @@
+/* Səhifənin gövdəsi qlobal başlığın ALTINDA başlayır (AppHeader), ona görə
+   yuxarı boşluq başlığın öz haşiyəsindən sonra ölçülür. */
+.page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: var(--space-10) 20px 64px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-7);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-10);
+}
+
+/*
+ * Səhifənin adı — brend deyil.
+ *
+ * Əvvəl burada emoji ilə «Katibe Admin» yazılırdı, yəni məhsulun adı hər
+ * ekranda təkrarlanır və hər dəfə başqa emoji ilə gəlirdi. Brend indi qlobal
+ * başlıqdadır (AppHeader); bu sətir yalnız «hansı ekrandayam» sualına cavab
+ * verir və yeni ekranlardakı TopBar ilə eyni ölçüdədir.
+ */
+.brand {
+  font-size: var(--text-title);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-tight);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 2px;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logoutButton {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--fg);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.logoutButton:hover {
+  border-color: var(--muted);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+}
+
+.cardLabel {
+  color: var(--muted);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.userGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.userCardName {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 4px 0 12px;
+}
+
+.instanceLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-top: 8px;
+  color: var(--fg);
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.instanceLink:hover {
+  border-color: var(--accent);
+}
+
+.cardValue {
+  font-size: 26px;
+  font-weight: 700;
+  margin-top: 6px;
+}
+
+.section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.sectionTitle {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.legend {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.rangeGroup {
+  display: flex;
+  gap: 6px;
+}
+
+/* Two filter rows (named/unnamed, then chat type) stacked in one header slot. */
+.filterStack {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+}
+
+.rangeLink {
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.rangeLinkActive {
+  color: var(--brand-ink);
+  background: var(--accent);
+  border-color: var(--accent);
+  font-weight: 600;
+}
+
+.chartScroll {
+  overflow-x: auto;
+}
+
+.table {
+  font-size: 13px;
+}
+
+.table th {
+  text-align: left;
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.table td {
+  padding: 10px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.numCell {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.jid {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.empty {
+  color: var(--muted);
+  font-size: 13px;
+  padding: 12px 0;
+}
+
+.needsLabelBadge {
+  color: var(--danger);
+  font-size: 12px;
+}
+
+.confidenceBadge {
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.confidenceBadge[data-level="HIGH"] {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.confidenceBadge[data-level="LOW"] {
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+.suggestionReason {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.4;
+  margin-top: 3px;
+  max-width: 280px;
+}
+
+.acceptButton {
+  background: var(--accent);
+  color: var(--brand-ink);
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.acceptButton:hover {
+  filter: brightness(1.08);
+}
+
+/* --- Submit feedback (SubmitButton) ---
+   A server action on the review page costs a round trip plus a re-render of
+   the whole queue. Without any of this the page sat there looking untouched
+   and people clicked again. */
+
+.acceptButton:disabled,
+.rowButton:disabled,
+.inlineButton:disabled,
+.logoutButton:disabled {
+  opacity: 0.45;
+  cursor: default;
+  filter: none;
+}
+
+/* aria-busy marks the one button that was actually pressed, so it keeps full
+   contrast while its neighbours fade. On a single-button form that is simply
+   the button itself. */
+.acceptButton[aria-busy="true"],
+.rowButton[aria-busy="true"],
+.inlineButton[aria-busy="true"],
+.logoutButton[aria-busy="true"] {
+  opacity: 1;
+}
+
+.btnSpinner {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  vertical-align: -1px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-right-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+/* On a page of 300 near-identical rows the spinner alone is too small to find
+   again after scrolling — the whole row lifts out of the list instead. */
+/* Painted on the cells, not the row: tables here are border-collapse:
+   collapse, and a collapsed row never paints its own box-shadow. */
+.table tr:has(button[aria-busy="true"]) td {
+  background: var(--surface-2);
+}
+
+.table tr:has(button[aria-busy="true"]) td:first-child {
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+
+.selectBusy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--accent);
+}
+
+.chatLink {
+  color: var(--fg);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--muted);
+}
+
+.chatLink:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.summaryLoading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 14px;
+  padding: 18px 0;
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.summaryHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.summaryHeadline {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.summaryText {
+  margin: 0 0 16px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.summaryLabel {
+  color: var(--muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 14px 0 8px;
+}
+
+.summaryList {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.summaryFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.inlineForm {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.inlineInput {
+  flex: 1;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 12px;
+  color: var(--fg);
+  font-size: 13px;
+  outline: none;
+}
+
+.inlineInput:focus {
+  border-color: var(--accent);
+}
+
+.inlineButton {
+  background: var(--accent);
+  color: var(--brand-ink);
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 16px;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.inlineButton:hover {
+  filter: brightness(1.08);
+}
+
+.rowForm {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.rowInput {
+  width: 140px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 8px;
+  color: var(--fg);
+  font-size: 12px;
+  outline: none;
+}
+
+.rowInput:focus {
+  border-color: var(--accent);
+}
+
+.rowButton {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--fg);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.rowButton:hover {
+  border-color: var(--accent);
+}
+
+.pillList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pill {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 13px;
+}
+
+.twoCol {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.twoCol .section {
+  margin-bottom: 0;
+}
+
+.trendUp {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.trendDown {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.footer {
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* --- Chat transcript (last N messages on the chat detail page) --- */
+.transcript {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 460px;
+  overflow-y: auto;
+  padding: 4px 2px;
+}
+
+.bubbleInRow,
+.bubbleOutRow {
+  display: flex;
+}
+
+.bubbleInRow {
+  justify-content: flex-start;
+}
+
+.bubbleOutRow {
+  justify-content: flex-end;
+}
+
+.bubbleIn,
+.bubbleOut {
+  max-width: min(78%, 560px);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 8px 12px;
+}
+
+.bubbleIn {
+  background: var(--surface-2);
+  border-bottom-left-radius: 4px;
+}
+
+/* Our own messages lean on the accent so the two sides read apart at a glance. */
+.bubbleOut {
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface-2));
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
+  border-bottom-right-radius: 4px;
+}
+
+.bubbleSender {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent-2);
+  margin-bottom: 3px;
+}
+
+.bubbleText {
+  font-size: 13px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.bubbleMedia {
+  font-size: 13px;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.bubbleTime {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+/* --- Pager + inline link pending indicator --- */
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+/* Sits inside a FilterLink; only rendered while that navigation is pending. */
+.linkSpinner {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-left: 6px;
+  vertical-align: -1px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-right-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+/* --- Instance pairing (QR) --- */
+.qrWrap {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+/* WhatsApp QR codes need a light background to scan reliably. */
+.qrImage {
+  width: 264px;
+  height: 264px;
+  background: #fff;
+  padding: 10px;
+  border-radius: 12px;
+  image-rendering: pixelated;
+}
+
+.qrSteps {
+  flex: 1;
+  min-width: 240px;
+}
+
+.pairDone {
+  padding: 18px 0;
+}
+
+.pairDoneTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+
+/* Chats where the other side spoke last — an unanswered count worth noticing. */
+.awaitingBadge {
+  background: color-mix(in srgb, var(--danger) 18%, transparent);
+  color: var(--danger);
+  border-radius: 999px;
+  padding: 2px 9px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* --- Transcript media ---------------------------------------------------- */
+
+/* Capped so one tall photo cannot push the rest of the conversation off
+   screen; the bubble is the frame, the image fits inside it. */
+.mediaVisual {
+  display: block;
+  max-width: 100%;
+  max-height: 320px;
+  width: auto;
+  border-radius: 10px;
+  margin: 4px 0;
+  background: var(--panel-sunken);
+}
+
+.mediaAudio {
+  display: block;
+  width: 100%;
+  min-width: 220px;
+  margin: 4px 0;
+}
+
+/* Marks text that was machine-transcribed rather than typed by a person. */
+.voiceBadge {
+  display: inline-block;
+  font-size: 11px;
+  opacity: 0.7;
+  margin-right: 4px;
+  white-space: nowrap;
+}
+
+/* --- Ad-hoc questions about a chat --------------------------------------- */
+
+.qaItem {
+  border-top: 1px solid var(--line);
+  padding: 12px 0;
+}
+
+.qaQuestion {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+/* Quotes are lifted verbatim from the conversation and are often in another
+   language than the answer, so they are set apart rather than blended in. */
+.qaEvidence {
+  opacity: 0.75;
+  font-style: italic;
+}
+
+/* A pill that is also a link into a conversation. */
+.pillLink {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  font-size: 12px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.pillLink:hover {
+  border-color: var(--brand);
+}
+
+/* --- Bulk selection bar --------------------------------------------------- */
+
+/* Sticky: on a list of hundreds the count and the controls are needed while
+   scrolling, not only at the top. */
+.selectBar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  margin-bottom: 8px;
+  background: var(--canvas);
+  border-bottom: 1px solid var(--line);
+}
+
+.selectCount {
+  font-size: 13px;
+  margin-left: 4px;
+  white-space: nowrap;
+}
+
+/* --- Nəzarətçi agent lenti (SupervisorFeed) ---
+   Dizayn: Claude Design "Nezaretci Lenti", 2026-08-25.
+   Qabarcıq düzümü sıra düzümü ilə əvəzləndi: 14 bayraq eyni görünəndə hansına
+   birinci baxmaq bilinmirdi. İndi hər sıranın solunda bal reyi var və zolaq
+   rəngi (kritik/ciddi/diqqət) sıranın haşiyəsindən oxunur. */
+
+.sfBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 12px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  margin-bottom: 18px;
+}
+
+/* "Yoxlamanı indi işlət" zolağı — lentin üstündə, sfBar ilə eyni qabda,
+   amma alçaq: burada rəqəm yox, bir düymə və bir sətir izah var. */
+.sfRunBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 10px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  margin-bottom: 14px;
+}
+
+.sfCounts {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.sfCount {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+}
+
+.sfCountNum {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.sfCountNum[data-tone="alarm"] { color: var(--danger); }
+.sfCountNum[data-tone="watch"] { color: var(--accent-2); }
+.sfCountNum[data-tone="done"] { color: var(--muted); }
+
+.sfCountLabel { font-size: 12px; color: var(--muted); }
+
+.sfDivider { width: 1px; height: 22px; background: var(--border); }
+
+.sfFilter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.sfFilterLabel {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-right: 2px;
+}
+
+/* Filtr düymələri linkdir: server komponentdə qalsın deyə vəziyyət URL-dədir,
+   client JS lazım gəlmir. */
+.sfChip {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--fg);
+  font-size: 12px;
+  padding: 5px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.sfChip:hover { border-color: var(--accent); }
+.sfChip[data-on="1"] { background: var(--accent); color: var(--brand-ink); border-color: var(--accent); font-weight: 600; }
+
+.sfHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 0 2px 10px;
+}
+
+.sfHeadTitle {
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.sfHeadHint {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.sfLegend {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 11px;
+  color: var(--muted);
+  flex-wrap: wrap;
+}
+
+.sfLegendItem { display: inline-flex; align-items: center; gap: 5px; }
+
+.sfSwatch { width: 8px; height: 8px; border-radius: 2px; flex: none; }
+.sfSwatch[data-band="kritik"] { background: var(--danger); }
+.sfSwatch[data-band="ciddi"] { background: var(--warn); }
+.sfSwatch[data-band="diqqet"] { background: var(--accent-2); }
+
+.sfList {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Bir tapıntı sırası: solda bal reyi, sağda məzmun. */
+.sfRow {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  gap: 13px;
+  padding: 13px 15px;
+  border-left: 3px solid var(--border);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.sfRow:last-child { border-bottom: none; }
+
+.sfRow[data-band="kritik"] {
+  border-left-color: var(--danger);
+  /* Yalnız kritik sıralar fon işığı alır — hamısı alsaydı fərq itərdi. */
+  background: linear-gradient(90deg, color-mix(in srgb, var(--danger) 5%, transparent), transparent 42%);
+}
+.sfRow[data-band="ciddi"] { border-left-color: var(--warn); }
+.sfRow[data-band="diqqet"] { border-left-color: var(--accent-2); }
+.sfRow[data-band="info"] { border-left-color: var(--border); }
+
+.sfRail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding-top: 1px;
+}
+
+.sfScore {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.sfVerdict {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+
+.sfScore[data-band="kritik"], .sfVerdict[data-band="kritik"] { color: var(--danger); }
+.sfScore[data-band="ciddi"], .sfVerdict[data-band="ciddi"] { color: var(--warn); }
+.sfScore[data-band="diqqet"] { color: var(--accent-2); }
+.sfScore[data-band="info"] { color: var(--muted); }
+.sfVerdict[data-band="diqqet"], .sfVerdict[data-band="info"] { color: var(--fg-dim); }
+
+.sfBody { min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+
+.sfTitleRow {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+
+.sfName {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  /* Kontakt adı bəzən uzun @lid rəqəmidir — düzümü dağıtmamalıdır. */
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sfName:hover { color: var(--accent); }
+
+.sfWait {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  border-radius: 5px;
+  padding: 2px 7px;
+  white-space: nowrap;
+}
+
+.sfWait[data-band="kritik"] { color: var(--danger); background: color-mix(in srgb, var(--danger) 12%, transparent); }
+.sfWait[data-band="ciddi"] { color: var(--warn); background: color-mix(in srgb, var(--warn) 12%, transparent); }
+.sfWait[data-band="diqqet"], .sfWait[data-band="info"] { color: var(--muted); background: var(--surface-2); }
+
+.sfWho { font-size: 11px; color: var(--muted); }
+
+.sfTag {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--fg-dim);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 6px;
+  white-space: nowrap;
+}
+
+.sfRepeat { font-size: 11px; color: var(--warn); }
+
+.sfText {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--fg-soft);
+  text-wrap: pretty;
+}
+
+.sfReason {
+  font-size: 11px;
+  color: var(--fg-dim);
+  font-style: italic;
+}
+
+/* Siyahı postunun sübutu: ən köhnə beş söhbət ayrıca qutuda, hər biri link.
+   Əvvəl bunlar mətnin içində itirdi. */
+.sfEvidence {
+  display: flex;
+  flex-direction: column;
+  background: var(--inset);
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.sfEvidenceHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 7px 11px;
+  border-bottom: 1px solid var(--hairline);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--fg-dim);
+}
+
+.sfEvidenceRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 11px;
+  font-size: 12px;
+  border-top: 1px solid var(--hairline);
+}
+
+.sfEvidenceRow:first-of-type { border-top: none; }
+.sfEvidenceRow:hover { background: var(--surface-2); }
+
+.sfEvidenceName {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sfDot { width: 5px; height: 5px; border-radius: 50%; flex: none; background: var(--fg-dim); }
+.sfDot[data-client="1"] { background: var(--accent); }
+
+.sfEvidenceWait {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.sfEvidenceFoot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 11px;
+  border-top: 1px solid var(--hairline);
+  font-size: 10px;
+  color: var(--fg-dim);
+  flex-wrap: wrap;
+}
+
+.sfActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 1px;
+}
+
+.sfLink {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 12px;
+  padding: 4px 10px;
+  color: var(--fg);
+}
+
+.sfLink:hover { border-color: var(--accent); color: var(--accent); }
+
+.sfResolve {
+  background: var(--accent);
+  color: var(--brand-ink);
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  padding: 5px 11px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.sfResolve:hover { filter: brightness(1.08); }
+
+/* Aşağı ballı sıralarda bağlama düyməsi sakit qalır — o, bayraq deyil. */
+.sfResolveQuiet {
+  background: var(--surface-2);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.sfResolveQuiet:hover { border-color: var(--accent); }
+
+/* «Bir daha göstərmə» — sıradakı ən sərt düymə, amma səssiz durur: onu
+   axtaran adam tapır, təsadüfən basan yox. Rəng yalnız üstünə gələndə qırmızı
+   olur, çünki lentdə onsuz da qırmızı zolaqlar var və düymə onlarla
+   yarışmamalıdır. */
+.sfMute {
+  background: transparent;
+  color: var(--fg-dim);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.sfMute:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+/* «Möhlət ver» — «Bir daha göstərmə» ilə eyni sakit qabıq, amma başqa rəngə
+   açılır: möhlət geri qaytarıla bilən və öz-özünə bitən qərardır, ona görə
+   üstünə gələndə qırmızı deyil, vurğu rəngi olur. İkisi yan-yana durur və
+   fərqləri yalnız bu rəngdən oxunur — mətn onsuz da qısadır. */
+.sfSnooze {
+  background: transparent;
+  color: var(--fg-dim);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.sfSnooze:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Müddət seçicisi. Dörd variant bir sətirdə: sual «neçə gün» olduğu üçün
+   cavablar yan-yana müqayisə olunmalıdır, siyahı halında yox. Dar ekranda
+   sarılır. */
+.snoozePicker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.snoozeOption {
+  position: relative; /* gizli radio-nun lövbəri — bax .snoozeRadio */
+  flex: 1 1 92px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-2);
+  cursor: pointer;
+}
+
+.snoozeOption:hover { border-color: var(--accent); }
+
+.snoozeOption[data-active="true"] {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+/* Radio-nun özü gizlidir, amma SİLİNMİR: fokus halqası, ox düymələri və ekran
+   oxuyucunun «4 variantdan biri» elanı ondan gəlir. display:none onların
+   hamısını aparardı. */
+.snoozeRadio {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.snoozeOption:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.snoozeDay { font-size: 13px; font-weight: 600; color: var(--fg); }
+.snoozeHint { font-size: 11px; color: var(--muted); }
+
+.dangerButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--danger);
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.dangerButton:hover { filter: brightness(1.08); }
+.dangerButton:disabled { opacity: 0.7; cursor: default; }
+
+.muteList {
+  margin: 0 0 14px;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--fg-soft);
+}
+
+.muteLabel {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+
+.sfTime {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  color: var(--fg-dim);
+  margin-left: 2px;
+}
+
+/* Şərh lenti: "Həll edildi"dən ayrıca — bayrağı bağlamadan izah. */
+.sfComments {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 11px;
+  background: var(--inset);
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+}
+
+.sfComment { display: flex; flex-direction: column; gap: 1px; }
+
+.sfCommentMeta {
+  font-size: 10px;
+  color: var(--fg-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.sfCommentText { font-size: 13px; color: var(--fg-soft); text-wrap: pretty; }
+
+.sfCommentForm { display: flex; gap: 6px; align-items: center; }
+
+.sfCommentInput {
+  flex: 1;
+  min-width: 0;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 9px;
+  font-size: 12px;
+  color: var(--fg);
+}
+
+.sfCommentInput:focus { outline: none; border-color: var(--accent); }
+
+.sfCommentSubmit {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 11px;
+  font-size: 12px;
+  color: var(--fg);
+  cursor: pointer;
+  flex: none;
+}
+
+.sfCommentSubmit:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Bağlananlar: açılıb-bağlanan, çünki lenti aşağı dartırdı. */
+.sfClosed {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.sfClosedSummary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 15px;
+  cursor: pointer;
+  list-style: none;
+  flex-wrap: wrap;
+}
+
+.sfClosedSummary::-webkit-details-marker { display: none; }
+
+.sfClosedTitle { font-size: 14px; font-weight: 600; }
+
+.sfClosedMeta {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.sfClosedToggle { margin-left: auto; font-size: 11px; color: var(--muted); }
+
+.sfClosedBody {
+  border-top: 1px solid var(--hairline);
+  padding: 4px 6px 8px;
+  overflow-x: auto;
+}
+
+.sfClosedTable { font-size: 13px; min-width: 520px; }
+
+.sfClosedTable th {
+  text-align: left;
+  color: var(--fg-dim);
+  font-weight: 500;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 9px 10px;
+  white-space: nowrap;
+}
+
+.sfClosedTable td {
+  padding: 9px 10px;
+  border-top: 1px solid var(--hairline);
+}
+
+.sfCellName { max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sfCellMuted { color: var(--muted); font-size: 12px; }
+.sfCellNum { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-variant-numeric: tabular-nums; }
+.sfCellNum[data-band="kritik"] { color: var(--danger); }
+.sfCellNum[data-band="ciddi"] { color: var(--warn); }
+.sfCellNum[data-band="diqqet"] { color: var(--accent-2); }
+.sfCellNum[data-band="info"] { color: var(--muted); }
+.sfCellRight { text-align: right; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--muted); }
+
+.sfHow { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; white-space: nowrap; }
+.sfHow[data-how="AUTO"] { color: var(--accent); }
+.sfHow[data-how="MANUAL"] { color: var(--muted); }
+.sfHow[data-how="SCOPE"] { color: var(--muted); }
+.sfHow[data-how="MUTED"] { color: var(--danger); }
+/* Möhlət bağlanma deyil, təxirə salmadır — «öz-özünə həll olundu» ilə eyni
+   sakit yaşıl da, «bir daha göstərmə» ilə eyni qırmızı da səhv olardı. */
+.sfHow[data-how="SNOOZED"] { color: var(--warn); }
+.sfHowDot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex: none; }
+
+.sfNote {
+  padding: 8px 11px 2px;
+  font-size: 11px;
+  color: var(--fg-dim);
+  text-wrap: pretty;
+}
+
+/* Boş hal: "heç nə yoxdur" da məlumat daşıyır. */
+.sfEmpty {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  flex-wrap: wrap;
+}
+
+.sfEmptyDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-top: 6px;
+  flex: none;
+}
+
+.sfEmptyTitle { font-size: 15px; font-weight: 600; color: var(--accent); }
+.sfEmptyText { font-size: 13px; color: var(--fg-soft); margin-top: 4px; text-wrap: pretty; }
+.sfStats { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 13px; }
+.sfStatNum {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 17px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.sfStatLabel { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* Qopuq instans xəbərdarlığı: bayraqları gizlədilib. Boş hal qutusu ilə eyni
+   həndəsə, amma xəbərdarlıq rəngində — lentin başında gözdən qaçmasın. */
+.sfFrozen {
+  background: color-mix(in srgb, var(--warn) 8%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--warn) 40%, var(--border));
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+}
+
+.sfFrozenIcon { font-size: 16px; line-height: 1.2; flex: none; }
+.sfFrozenTitle { font-size: 15px; font-weight: 600; color: var(--warn); }
+.sfFrozenText { font-size: 13px; color: var(--fg-soft); margin-top: 4px; text-wrap: pretty; }
+
+.sfFrozenList { display: flex; flex-direction: column; gap: 4px; margin-top: 9px; }
+.sfFrozenRow {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 13px;
+}
+.sfFrozenName { font-weight: 600; }
+.sfFrozenMeta { font-size: 11px; color: var(--muted); }
+.sfFrozenCount {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--warn);
+  background: color-mix(in srgb, var(--warn) 14%, transparent);
+  border-radius: 999px;
+  padding: 1px 7px;
+  white-space: nowrap;
+}
+
+.sfLive {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 11px;
+  white-space: nowrap;
+}
+
+.sfLiveDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex: none;
+  animation: sfPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes sfPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+/* Hərəkət azaldılması istənəndə nəbz dayanır. */
+@media (prefers-reduced-motion: reduce) {
+  .sfLiveDot { animation: none; }
+}
+
+/* --- Ümumi köməkçilər (Nəzarətçidən kənarda da işlənir) --- */
+
+/* Forma sahəsi. /admin/accounts bunu işlədirdi, amma sinif heç vaxt mövcud
+   olmayıb — yəni parol və istifadəçi adı sahələri stilsiz render olunurdu. */
+.input {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: var(--fg);
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+  min-width: 0;
+}
+
+.input:focus { border-color: var(--accent); }
+
+/* Kiçik vəziyyət pilulu: rol, privatlıq, bal. data-band ilə rənglənir. */
+.severityBadge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.severityBadge[data-band="diqqet"] { color: var(--accent-2); border-color: var(--accent-2); }
+.severityBadge[data-band="ciddi"] { color: var(--warn); border-color: var(--warn); }
+.severityBadge[data-band="kritik"] {
+  color: var(--danger);
+  border-color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 18%, transparent);
+}
+
+/* Bir sətirdə yığılan idarəetmə elementləri. */
+.agentMeta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 4px 0;
+}
+
+/* Sürətli baxış: lentdən çıxmadan söhbətə baxıb bağlamaq (ChatQuickView.tsx). */
+.qvOverlay {
+  position: fixed;
+  inset: 0;
+  background: color-mix(in srgb, black 55%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 100;
+}
+
+.qvModal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 480px;
+  max-height: min(680px, 90vh);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 60px color-mix(in srgb, black 40%, transparent);
+}
+
+.qvHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  flex: none;
+}
+
+.qvTitle { font-size: 15px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.qvMeta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+.qvClose {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  width: 26px;
+  height: 26px;
+  flex: none;
+  cursor: pointer;
+  color: var(--fg-soft);
+  font-size: 13px;
+  line-height: 1;
+}
+
+.qvClose:hover { border-color: var(--accent); color: var(--accent); }
+
+.qvBody { flex: 1; overflow-y: auto; padding: 12px 16px; }
+
+.qvMore { font-size: 11px; color: var(--fg-dim); text-align: center; margin-bottom: 10px; }
+
+.qvFooter {
+  flex: none;
+  padding: 10px 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Doğrulama qeydi: söhbəti oxumuş ikinci rəy (verify.ts).
+   İki ton — "keep" bayrağı təsdiqləyir, "down" onu sancaqdan çıxarır. Rəng
+   fərqi lazımdır, çünki eyni qutu iki əks nəticəni daşıyır. */
+.sfVerify {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--hairline);
+  background: var(--inset);
+}
+
+.sfVerify[data-tone="down"] { border-color: color-mix(in srgb, var(--accent) 45%, transparent); }
+
+.sfVerifyTag {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--fg-dim);
+}
+
+.sfVerifyText { font-size: 12px; color: var(--fg-soft); text-wrap: pretty; }
+
+/* Menecerin 1-5 qiyməti — yalnız admin. */
+.sfRating { display: flex; flex-direction: column; gap: 4px; }
+
+.sfRatingForm { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+.sfRatingLabel { font-size: 11px; color: var(--fg-dim); }
+
+.sfRatingButtons { display: inline-flex; gap: 4px; }
+
+.sfRatingButton {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--fg-soft);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.sfRatingButton:hover { border-color: var(--accent); color: var(--accent); }
+
+/* "1" susdurma açır — geri qaytarıla bilən, amma nəticəsi görünməyən əməliyyat.
+   Ona görə tək o, neytral görünmür. */
+.sfRatingButton[data-noise="1"]:hover { border-color: var(--danger); color: var(--danger); }
+
+.sfRatingButton[data-active="1"] {
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.sfRatingNote {
+  flex: 1;
+  min-width: 160px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 9px;
+  font-size: 12px;
+  color: var(--fg);
+}
+
+.sfRatingNote:focus { outline: none; border-color: var(--accent); }
+
+.sfRatingCurrent { font-size: 11px; color: var(--fg-dim); }
+
+/* Son söhbətlər siyahısının önbaxış sütunu. Uzun mesaj sətri dartmasın deyə
+   bir sətirlə kəsilir — vaxt sütunu həmişə görünən yerdə qalmalıdır. */
+.previewCell {
+  max-width: 460px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--muted);
+}
+
+/* — Nömrənin silinməsi: bildiriş zolağı, fakt siyahısı, təsdiq forması — */
+
+/*
+ * Bildiriş zolağı. Server action redirect ilə qayıdır, ona görə nəticə
+ * URL-dədir və zolaq server komponentində render olunur — heç bir "toast"
+ * vəziyyəti brauzerdə saxlanmır, səhifə yenilənəndə itmir.
+ *
+ * Rəng tək daşıyıcı deyil (qayda 3): zolaqda həmişə mətn var, ikon isə
+ * mətnin əvvəlindədir.
+ */
+.notice {
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--brand);
+  background: var(--panel);
+  border-radius: var(--radius-md);
+  padding: var(--space-6) var(--space-8);
+  margin-bottom: var(--space-10);
+  font-size: var(--text-body-size);
+  line-height: 1.5;
+  color: var(--text-body);
+}
+
+.noticeDanger {
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--critical);
+  background: var(--panel);
+  border-radius: var(--radius-md);
+  padding: var(--space-6) var(--space-8);
+  margin-bottom: var(--space-10);
+  font-size: var(--text-body-size);
+  line-height: 1.5;
+  color: var(--text-body);
+}
+
+/*
+ * Etiket + dəyər sıraları. Cədvəl deyil: bu ekranda hər sıra ayrıca sualın
+ * cavabıdır, üstəlik telefonda cədvəl üfüqi sürüşür, `dl` isə sadəcə alta
+ * yığılır (aşağıdakı media sorğusu).
+ */
+.factList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+}
+
+.factRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-6);
+  padding: var(--space-5) 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.factList .factRow:last-child {
+  border-bottom: none;
+}
+
+.factLabel {
+  color: var(--text-muted);
+  font-size: var(--text-small);
+  margin: 0;
+}
+
+/* Rəqəm sıra-sıra düzülür: dəyər dəyişəndə sətir sürüşməməlidir (qayda 2). */
+.factValue {
+  margin: 0;
+  text-align: right;
+  font-family: var(--font-numeric);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-body-size);
+  color: var(--text-strong);
+}
+
+.confirmForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.checkRow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  font-size: var(--text-body-size);
+  line-height: 1.45;
+  color: var(--text-body);
+}
+
+/* Toxunma hədəfi: 13px-lik qutu barmaqla tutulmur. */
+.checkRow input {
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  flex: none;
+  accent-color: var(--critical);
+}
+
+.confirmActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+/*
+ * — Telefon —
+ *
+ * Admin ekranları masaüstü üçün yazılıb: başlıq iki yana dartılır, cədvəllər
+ * beş sütunludur, sıra formaları yan-yanadır. 430px-lik ekranda bunların
+ * hamısı üfüqi sürüşməyə çevrilir və səhifə "sınmış" görünür. Aşağıdakı blok
+ * dizaynı dəyişmir, yalnız eyni məzmunu alt-alta yığır:
+ *
+ *  - başlıq və düymələr sətirdən sütuna keçir,
+ *  - cədvəllər öz qabında sürüşür (səhifənin GÖVDƏSİ heç vaxt sürüşmür),
+ *  - sıra içindəki formalar tam eni tutur ki, düymə barmaq altına düşsün.
+ *
+ * Sərhəd 860px-dir, çünki AppShell, söhbət ekranı və nəzarət lenti məhz orada
+ * telefon düzülüşünə keçir (ui.module.css, chat.module.css). İki fərqli sərhəd
+ * eyni telefonda bir ekranı dar, o birini geniş göstərərdi.
+ */
+@media (max-width: 860px) {
+  .page {
+    padding: var(--space-9) var(--space-7) var(--space-12);
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-6);
+  }
+
+  .headerActions {
+    flex-wrap: wrap;
+  }
+
+  /* Panelin özü sürüşür — səhifənin gövdəsi yox. Bu blok qəsdən ÜMUMİDİR:
+     köhnə ekranlarda 27 cədvəl var və onların hər birini əl ilə qablaşdırmaq
+     ilk unudulan ekranda səssizcə köhnələrdi. Qablaşdırılmış cədvəl (aşağıda)
+     daha dəqiqdir — orada başlıq yerində qalır, yalnız cədvəl sürüşür. */
+  .section {
+    padding: var(--space-8) var(--space-7);
+    overflow-x: auto;
+  }
+
+  .tableScroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .inlineForm,
+  .rowForm {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .inlineInput,
+  .rowInput {
+    width: 100%;
+  }
+
+  .factRow {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-2);
+  }
+
+  .factValue {
+    text-align: left;
+  }
+
+  .confirmActions {
+    justify-content: stretch;
+  }
+
+  .confirmActions > * {
+    flex: 1;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+/* Axtarış nəticəsinin sırası — bütövlükdə bir link.
+   Əvvəl yalnız söhbətin adı klik olunurdu, halbuki adamın gözü tapılan
+   MƏTNDƏ idi: nəticəyə basmaq üçün nişan almaq lazım gəlirdi. */
+.hitLink {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  border-radius: 8px;
+  margin: -4px -8px;
+  padding: 4px 8px;
+}
+
+.hitLink:hover {
+  background: var(--surface-2);
+}
+
+.hitName {
+  display: block;
+  color: var(--fg);
+  font-weight: 600;
+}
+
+.hitLink:hover .hitName {
+  color: var(--accent);
+}
+
+.hitLink .sfTime,
+.hitLink .sfText {
+  display: block;
+}

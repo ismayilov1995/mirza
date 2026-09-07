@@ -1,0 +1,1234 @@
+/*
+ * Dizayn sisteminin primitivləri.
+ *
+ * Prototip inline stil işlədirdi; burada CSS Modules-dur, çünki layihənin
+ * qalanı belədir və :hover, :focus-visible, media sorğuları inline stildə
+ * ümumiyyətlə yazıla bilmir. Ölçülər prototipdən dəyişdirilmədən götürülüb.
+ *
+ * Variantlar data-atributlarla seçilir (data-tone, data-variant, data-size):
+ * sinif adlarını birləşdirməkdən oxunaqlıdır və bir elementin eyni ölçüdə iki
+ * variantı olması mümkünsüzdür — atribut birdir.
+ */
+
+/* ——— Badge ——— */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+  font-weight: var(--weight-semibold);
+  line-height: 1.4;
+  font-size: var(--text-tiny);
+  padding: 2px 7px;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--tone, var(--text-muted));
+}
+.badge[data-shape="md"] { border-radius: var(--radius-xs); }
+.badge[data-size="xs"] { font-size: var(--text-micro); padding: 1px 6px; }
+.badge[data-size="md"] { font-size: var(--text-small); padding: 4px 10px; }
+.badge[data-caps="true"] { text-transform: uppercase; letter-spacing: var(--tracking-caps); }
+
+.badge[data-tone="brand"]    { --tone: var(--brand); }
+.badge[data-tone="critical"] { --tone: var(--critical); }
+.badge[data-tone="serious"]  { --tone: var(--serious); }
+.badge[data-tone="info"]     { --tone: var(--info); }
+.badge[data-tone="faint"]    { --tone: var(--text-faint); }
+
+/* Neytral və solğun tonda haşiyə tonun özü deyil, --line-dir: mətn rəngi
+   onsuz da sakitdir, haşiyəni də sakitləşdirmək qutunu itirir. */
+.badge[data-tone="brand"],
+.badge[data-tone="critical"],
+.badge[data-tone="serious"],
+.badge[data-tone="info"] { border-color: var(--tone); }
+
+.badge[data-variant="soft"] {
+  background: color-mix(in srgb, var(--tone, var(--text-muted)) 14%, transparent);
+  border-color: transparent;
+}
+.badge[data-variant="solid"] {
+  background: var(--tone, var(--text-muted));
+  color: var(--brand-ink);
+  border-color: transparent;
+}
+
+/* ——— Button ——— */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: 8px 14px;
+  font-size: var(--text-body-size);
+  font-family: var(--font-ui);
+  line-height: 1.2;
+  border-radius: var(--radius-md);
+  white-space: nowrap;
+  cursor: pointer;
+  text-decoration: none;
+  background: var(--panel-raised);
+  color: var(--text-strong);
+  border: 1px solid var(--line);
+  font-weight: var(--weight-regular);
+  transition:
+    border-color var(--duration-fast) var(--ease-standard),
+    filter var(--duration-fast) var(--ease-standard);
+}
+.button[data-size="sm"] { padding: 6px 10px; font-size: var(--text-small); border-radius: var(--radius-sm); }
+.button[data-full="true"] { width: 100%; }
+
+.button[data-variant="primary"] {
+  background: var(--brand);
+  color: var(--brand-ink);
+  border-color: transparent;
+  font-weight: var(--weight-semibold);
+}
+.button[data-variant="quiet"] {
+  background: transparent;
+  color: var(--text-faint);
+}
+.button[data-variant="danger"] {
+  background: var(--critical);
+  color: #fff;
+  border-color: transparent;
+  font-weight: var(--weight-semibold);
+}
+
+.button:hover:not(:disabled) { border-color: var(--brand); }
+.button[data-variant="primary"]:hover:not(:disabled),
+.button[data-variant="danger"]:hover:not(:disabled) { filter: brightness(1.08); }
+.button[data-variant="quiet"]:hover:not(:disabled) { border-color: var(--critical); color: var(--critical); }
+
+.button:disabled,
+.button[aria-disabled="true"] {
+  opacity: var(--disabled-opacity);
+  cursor: default;
+  filter: none;
+  border-color: var(--line);
+}
+
+.spin { animation: katibe-spin var(--spin-duration) linear infinite; }
+@keyframes katibe-spin { to { transform: rotate(360deg); } }
+
+/* ——— Input ——— */
+.fieldWrap {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-width: 0;
+}
+.fieldIcon {
+  position: absolute;
+  left: 9px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-faint);
+  pointer-events: none;
+}
+.field {
+  width: 100%;
+  min-width: 0;
+  background: var(--panel-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+  color: var(--text-strong);
+  font-size: var(--text-body-size);
+  font-family: var(--font-ui);
+  outline: none;
+  transition: border-color var(--duration-fast) var(--ease-standard);
+}
+.field[data-size="sm"] { padding: 6px 8px; font-size: var(--text-small); border-radius: var(--radius-sm); }
+.field[data-icon="true"] { padding-left: 30px; }
+.field:focus { border-color: var(--brand); }
+.field::placeholder { color: var(--text-faint); }
+
+/* Tarix sahəsinin təqvim ikonu tünd temada görünmür — color-scheme bunu
+   brauzerə deyir, əl ilə filter tətbiq etməkdən etibarlıdır. */
+.field[type="date"] { color-scheme: inherit; }
+
+/* ——— FilterChip ——— */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 5px 12px;
+  font-size: var(--text-small);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--line);
+  background: var(--panel-raised);
+  color: var(--text-muted);
+  font-weight: var(--weight-regular);
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  transition: border-color var(--duration-fast) var(--ease-standard);
+}
+.chip[data-shape="md"] { border-radius: var(--radius-md); }
+.chip:hover { border-color: var(--brand); }
+.chip[aria-current="page"],
+.chip[data-active="true"] {
+  border-color: var(--brand);
+  background: var(--brand);
+  color: var(--brand-ink);
+  font-weight: var(--weight-semibold);
+}
+
+/* ——— EmptyState ——— */
+.empty {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-7);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+}
+.empty[data-tone="warning"] {
+  background: color-mix(in srgb, var(--serious) 8%, var(--panel));
+  border-color: color-mix(in srgb, var(--serious) 40%, var(--line));
+}
+.emptyIcon { color: var(--text-muted); margin-top: 1px; }
+.empty[data-tone="positive"] .emptyIcon,
+.empty[data-tone="positive"] .emptyTitle { color: var(--brand); }
+.empty[data-tone="warning"] .emptyIcon,
+.empty[data-tone="warning"] .emptyTitle { color: var(--serious); }
+.emptyBody { min-width: 0; flex: 1; }
+.emptyTitle {
+  font-size: var(--text-title);
+  font-weight: var(--weight-semibold);
+  color: var(--text-muted);
+}
+.emptyText {
+  font-size: var(--text-body-size);
+  color: var(--text-body);
+  margin-top: var(--space-2);
+  text-wrap: pretty;
+  line-height: var(--leading-snug);
+}
+
+/* ——— Modal ——— */
+.scrim {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay-scrim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-10);
+  z-index: 100;
+}
+.dialog {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-height: min(680px, 90vh);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow-modal);
+}
+.dialogHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding: var(--space-7) var(--space-8);
+  border-bottom: 1px solid var(--line);
+  flex: none;
+}
+.dialogTitle {
+  font-size: var(--text-title);
+  font-weight: var(--weight-semibold);
+  color: var(--text-strong);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dialogMeta { font-size: var(--text-small); color: var(--text-muted); margin-top: 2px; }
+.dialogClose {
+  background: var(--panel-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  width: 26px;
+  height: 26px;
+  flex: none;
+  cursor: pointer;
+  color: var(--text-body);
+  display: grid;
+  place-items: center;
+}
+.dialogClose:hover { border-color: var(--brand); }
+.dialogBody { flex: 1; overflow-y: auto; padding: var(--space-6) var(--space-8); }
+
+/* ——— TopBar ——— */
+/*
+ * Səhifə başlığı — bir sətir.
+ *
+ * Brend, tema və «yalnız oxu» buradan çıxıb qlobal başlığa keçdi (AppHeader),
+ * ona görə bu zolağın işi yalnız «hansı ekrandayam» sualına cavab verməkdir.
+ * Başlıq və alt başlıq eyni xətdə durur: iki sətir 56px-lik başlığın altında
+ * ikinci bir «başlıq bloku» kimi görünürdü.
+ */
+.topbar {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-5);
+  padding: var(--space-5) var(--space-9);
+  border-bottom: 1px solid var(--line);
+  background: var(--panel);
+  flex: none;
+}
+.topbarBack {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-muted);
+  font-size: var(--text-small);
+  white-space: nowrap;
+}
+.topbarBack:hover { color: var(--text-strong); }
+.topbarTitle {
+  font-size: var(--text-title);
+  font-weight: var(--weight-semibold);
+  color: var(--text-strong);
+  letter-spacing: var(--tracking-tight);
+  flex: none;
+}
+/* Alt başlıq kəsilən tərəfdir: ekranın adı həmişə tam görünməlidir. */
+.topbarSub {
+  font-size: var(--text-small);
+  color: var(--text-muted);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.topbarActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-left: auto;
+  align-self: center;
+  flex: none;
+}
+
+/* ——— Sidebar ——— */
+.nav {
+  width: var(--sidebar-width);
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  border-right: 1px solid var(--line);
+  min-height: 0;
+}
+/* Sidebar-ın öz brend başlığı yoxdur: «Katibe» qlobal başlıqdadır və iki
+   yerdə yazılsaydı, ikisi nə vaxtsa bir-birindən fərqlənərdi. */
+.navBody { flex: 1; overflow-y: auto; padding: var(--space-6) 0; min-height: 0; }
+.navSection { margin-bottom: var(--space-6); }
+.navLabel {
+  padding: var(--space-3) var(--space-7);
+  font-size: var(--text-micro);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  color: var(--text-faint);
+}
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-4) var(--space-7);
+  font-size: var(--text-body-size);
+  color: var(--text-body);
+  background: transparent;
+  font-weight: var(--weight-regular);
+  text-decoration: none;
+}
+.navItem:hover { background: var(--panel-raised); color: var(--text-strong); }
+.navItem[aria-current="page"] {
+  color: var(--text-strong);
+  background: var(--panel-raised);
+  box-shadow: var(--shadow-nav-active);
+  font-weight: var(--weight-semibold);
+}
+.navItemText { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.navFoot {
+  display: flex;
+  gap: var(--space-5);
+  padding: var(--space-6) var(--space-7);
+  background: var(--panel-sunken);
+  border-top: 1px solid var(--line);
+  flex: none;
+}
+.navFootTitle { font-size: var(--text-small); font-weight: var(--weight-semibold); color: var(--brand); }
+.navFootText {
+  font-size: var(--text-tiny);
+  color: var(--text-faint);
+  margin-top: 2px;
+  line-height: var(--leading-snug);
+  text-wrap: pretty;
+}
+
+@media (max-width: 860px) {
+  .nav { width: 100%; border-right: none; border-bottom: 1px solid var(--line); }
+  /*
+   * İKİ SƏTİR, bir sürüşmə yox. Naviqasiya üstdə, nömrələr altda.
+   *
+   * Əvvəl hamısı bir üfüqi sürüşən sırada idi: naviqasiya 390px-i doldurur,
+   * nömrələr isə kənarda qalırdı — yəni mənbə seçicisi telefonda YOX idi,
+   * çünki onu görmək üçün zolağı yana sürüşdürmək lazım olduğunu bilmək
+   * lazımdır. İndi hər sıra öz sətrindədir və öz içində sürüşür.
+   */
+  .navBody {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+    overflow: visible;
+    padding: var(--space-3) var(--space-4);
+  }
+  .navSection { max-width: 100%; overflow-x: auto; }
+  .navSection { margin-bottom: 0; display: flex; }
+  .navLabel { display: none; }
+  .navItem { white-space: nowrap; }
+  .navFoot { display: none; }
+}
+
+/* ——— Tema seçici ——— */
+.themeGroup {
+  display: inline-flex;
+  gap: var(--space-2);
+  background: var(--panel-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  padding: 2px;
+}
+.themeBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: var(--text-micro);
+  padding: 4px 9px;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text-muted);
+}
+.themeBtn:hover { color: var(--text-strong); }
+.themeBtn[data-active="true"] {
+  background: var(--brand);
+  color: var(--brand-ink);
+  font-weight: var(--weight-semibold);
+}
+
+
+/* ——— Panel ———
+   Prototipdə .section + .sectionHeader + .sectionTitle üçlüyü idi; burada bir
+   komponentdir, çünki üçü heç vaxt ayrı işlənmirdi. */
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  padding: var(--pad-panel);
+}
+/* Sıra siyahısı saxlayan panel doldurmasız olur: sıraların öz haşiyəsi
+   panelin kənarına qədər getməlidir, yoxsa ayırıcı xətlər havada qalır. */
+.panel[data-pad="false"] { padding: 0; }
+.panelHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+  margin-bottom: var(--space-8);
+}
+.panel[data-pad="false"] > .panelHead {
+  padding: var(--space-7) var(--space-9);
+  margin-bottom: 0;
+  border-bottom: 1px solid var(--line);
+}
+.panelHead[data-empty="true"] { margin-bottom: 0; }
+.panelTitles {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-5);
+  flex-wrap: wrap;
+  min-width: 0;
+}
+.panelTitle {
+  font-size: var(--text-title);
+  font-weight: var(--weight-semibold);
+  color: var(--text-strong);
+}
+.panelHint { font-size: var(--text-small); color: var(--text-muted); }
+.panelActions { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+
+/* ——— StatCard ———
+   Rəqəm monospace-dir və tabular-nums ilə gedir: kartlar yan-yana duranda
+   dəyər dəyişəndə sətir sürüşməməlidir. */
+.statCard {
+  display: block;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  padding: var(--pad-card);
+  text-decoration: none;
+}
+a.statCard:hover { border-color: var(--brand); }
+.statLabel {
+  color: var(--text-muted);
+  font-size: var(--text-small);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.statValue {
+  font-size: var(--text-metric);
+  font-weight: var(--weight-bold);
+  margin-top: var(--space-3);
+  font-family: var(--font-numeric);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+  color: var(--text-strong);
+}
+.statCard[data-tone="critical"] .statValue { color: var(--critical); }
+.statCard[data-tone="serious"] .statValue { color: var(--serious); }
+.statCard[data-tone="brand"] .statValue { color: var(--brand); }
+.statHint {
+  color: var(--text-muted);
+  font-size: var(--text-body-size);
+  margin-top: var(--space-3);
+  text-wrap: pretty;
+}
+/* Kartlar üçün hazır şəbəkə — dörd kart geniş ekranda bir sıra, dar ekranda
+   öz-özünə qatlanır. */
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-7);
+}
+
+/* ——— LiveDot ——— */
+.liveDot {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  font-size: var(--text-small);
+  color: var(--text-muted);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  padding: 5px 11px;
+  white-space: nowrap;
+}
+.livePulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--text-faint);
+}
+.liveDot[data-live="true"] .livePulse {
+  background: var(--brand);
+  animation: katibe-pulse var(--pulse-duration) ease-in-out infinite;
+}
+@keyframes katibe-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+/* ——— ReadOnlyLock ———
+   Məhsulun əsas vədi. Əvvəl hər səhifənin altında kiçik boz mətn idi və
+   oxunmurdu; indi həmişə eyni yerdə duran nişandır. */
+.lockInline {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--line);
+  background: var(--panel-sunken);
+  color: var(--text-faint);
+  font-size: var(--text-tiny);
+  white-space: nowrap;
+}
+
+/* ——— SeverityScore ———
+   Bal reyi: rəqəm + verdikt sözü. Rəng tək daşıyıcı deyil — zolağı rəngsiz
+   də oxumaq mümkün olmalıdır, ona görə rəqəm və söz həmişə yanındadır. */
+.score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  width: 52px;
+}
+.scoreNum {
+  font-family: var(--font-numeric);
+  font-size: 19px;
+  font-weight: var(--weight-semibold);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--band, var(--text-muted));
+}
+.scoreVerdict {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-align: center;
+  color: var(--text-faint);
+}
+.score[data-band="kritik"] .scoreVerdict,
+.score[data-band="ciddi"] .scoreVerdict { color: var(--band); }
+
+/* ——— FlagRow ———
+   Zolaq rəngi sol reydən oxunur; fon işığını YALNIZ kritik sıralar alır —
+   hamısı alsaydı fərq itərdi və "indi nəyə bax" sualı yenidən cavabsız
+   qalardı. */
+.flagRow {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  gap: 13px;
+  padding: 13px 15px;
+  border-left: var(--rail-width) solid var(--band, var(--line));
+  border-bottom: 1px solid var(--line-soft);
+}
+.flagRow[data-last="true"] { border-bottom: none; }
+.flagRow[data-band="kritik"] {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--critical) 5%, transparent),
+    transparent 42%
+  );
+}
+.flagBody {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.flagTitleRow { display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; }
+.flagTitle {
+  font-size: var(--text-title);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text-strong);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+a.flagTitle:hover { color: var(--brand); text-decoration: none; }
+/* Gözləmə çipi hədəfi də daşıyır: "43 saat" özü heç nə demir, "hədəf 2 saat"
+   yanında olanda pozuntunun miqyası dərhal oxunur. */
+.flagWait {
+  font-family: var(--font-numeric);
+  font-size: var(--text-tiny);
+  border-radius: 5px;
+  padding: 2px 7px;
+  white-space: nowrap;
+  color: var(--text-muted);
+  background: var(--panel-raised);
+}
+.flagRow[data-band="kritik"] .flagWait,
+.flagRow[data-band="ciddi"] .flagWait {
+  color: var(--band);
+  background: color-mix(in srgb, var(--band) 12%, transparent);
+}
+.flagWho { font-size: var(--text-tiny); color: var(--text-muted); }
+.flagRepeat { font-size: var(--text-tiny); color: var(--serious); }
+.flagText {
+  font-size: var(--text-body-size);
+  line-height: var(--leading-normal);
+  color: var(--text-body);
+  text-wrap: pretty;
+}
+.flagReason { font-size: var(--text-tiny); color: var(--text-faint); font-style: italic; }
+.flagFoot {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-top: 1px;
+}
+.flagTime {
+  font-family: var(--font-numeric);
+  font-size: var(--text-tiny);
+  color: var(--text-faint);
+  margin-left: 2px;
+}
+
+/* Sıra daxilindəki sübut qutusu — dəlil mətni gövdədən ayrılmalıdır, yoxsa
+   agentin cümləsi ilə müştərinin sözü bir-birinə qarışır. */
+.evidenceBox {
+  background: var(--panel-sunken);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-md);
+  padding: 9px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.evidenceLabel {
+  font-size: var(--text-micro);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+}
+.evidenceText {
+  font-size: var(--text-small);
+  color: var(--text-body);
+  line-height: var(--leading-snug);
+  text-wrap: pretty;
+}
+
+/* Bağlanmış bayrağın təsdiq zolağı. */
+.resolvedStrip {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  padding: 8px 12px;
+  border: 1px solid var(--brand-line);
+  border-radius: var(--radius-md);
+  background: var(--brand-soft);
+}
+.resolvedText {
+  font-size: var(--text-small);
+  color: var(--text-body);
+  min-width: 0;
+  text-wrap: pretty;
+}
+.resolvedTime {
+  margin-left: auto;
+  font-family: var(--font-numeric);
+  font-size: var(--text-tiny);
+  color: var(--text-faint);
+  flex: none;
+}
+
+/* ——— Bağlama forması ———
+   Sayğac sahənin ÜSTÜNDƏDİR, altında yox: adam yazarkən gözü sahədədir və
+   "daha 4 hərf" məlumatı yazı bitəndən sonra deyil, yazı gedərkən lazımdır. */
+.closeGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-5);
+  align-items: end;
+  margin-top: 2px;
+}
+.closeField { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.closeHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+.closeLabel {
+  font-size: var(--text-micro);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  color: var(--text-faint);
+}
+.closeCounter { font-size: var(--text-tiny); color: var(--text-faint); }
+.closeCounter[data-ok="true"] { color: var(--brand); }
+.closeArea {
+  width: 100%;
+  resize: vertical;
+  background: var(--panel-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 8px 11px;
+  color: var(--text-strong);
+  font-size: var(--text-small);
+  font-family: var(--font-ui);
+  line-height: var(--leading-snug);
+  outline: none;
+}
+.closeArea:focus { border-color: var(--brand); }
+.closeArea::placeholder { color: var(--text-faint); }
+/* Sağ sütunda qalır — səbəb sahəsi hələ açılmayanda da. Sahə ilə birlikdə
+   sola sürüşsəydi, «Həll edildi» basılan anda düymə yerini dəyişərdi. */
+.closeButtons { grid-column: 2; display: flex; gap: var(--space-4); padding-bottom: 1px; }
+/* Dar ekranda düymələr sahənin altına düşür — yan-yana sıxılsalar hər ikisi
+   oxunmaz olur. */
+@media (max-width: 720px) {
+  .closeGrid { grid-template-columns: minmax(0, 1fr); }
+  .closeButtons { grid-column: 1; padding-bottom: 0; }
+}
+
+/* ——— Şərh lenti ———
+   Kim və nə vaxt — sabit enli monospace sütunda: şərhlər alt-alta duranda
+   mətnin sol kənarı sürüşməməlidir. */
+.comments { display: flex; flex-direction: column; gap: var(--space-4); margin-top: 2px; }
+.comment { display: flex; gap: var(--space-5); font-size: var(--text-small); }
+.commentMeta {
+  font-family: var(--font-numeric);
+  font-size: var(--text-tiny);
+  color: var(--text-faint);
+  flex: none;
+  width: 96px;
+}
+.commentText { color: var(--text-body); min-width: 0; text-wrap: pretty; }
+.commentForm { display: flex; gap: var(--space-4); }
+
+/* ——— Süzgəc zolağı ———
+   Satıcı və bal seçiciləri bir qabda: ikisi də "siyahını dəyiş" deməkdir,
+   ayrı qablarda dursalar ikinci bir naviqasiya kimi oxunurlar. */
+.filterBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+  flex-wrap: wrap;
+  padding: var(--space-6) var(--space-7);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+}
+.filterGroup { display: flex; align-items: center; gap: var(--space-5); flex-wrap: wrap; }
+.filterLabel {
+  font-size: var(--text-micro);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  color: var(--text-faint);
+}
+/* Zolaq çipindəki rəng nümunəsi. Rəng burada TƏK daşıyıcı deyil — yanındakı
+   "9–10 kritik" yazısı eyni şeyi deyir. */
+.bandSwatch {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  flex: none;
+  background: var(--band, var(--text-faint));
+}
+
+/* ——— Ekran çərçivəsi ———
+   Sidebar solda sabit, məzmun sağda öz-özünə sürüşür. Səhifənin özü sürüşmür:
+   panel gün boyu açıq qalır və başlığın ekrandan çıxması iş alətində itki
+   deməkdir. */
+/*
+ * Ekranın kökü: üstdə tam eni tutan başlıq, altında naviqasiya + məzmun.
+ *
+ * Hündürlüyü BURADA saxlanılır. Əvvəl `.shell` özü `100vh` idi; başlıq onun
+ * üstünə gələndə səhifə tam bir başlıq boyu aşağı sürüşürdü. İndi sürüşmə
+ * sərhədi bir yerdədir və başlıq ondan kənarda qalır.
+ */
+.shellOuter {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--canvas);
+  color: var(--text-strong);
+}
+
+.shell {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--canvas);
+  color: var(--text-strong);
+}
+.shellMain {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.shellScroll { flex: 1; min-height: 0; overflow-y: auto; }
+/* Panellər arasındakı boşluq ÇƏRÇİVƏNİN işidir, panelin yox.
+   Əvvəl belə deyildi: .runBar özünə margin-bottom yazırdı, ana səhifə isə
+   inline flex qabı düzəldirdi — yəni eyni qərar iki yerdə, hər ikisi ekranın
+   içində. Dörd panel yan-yana düzülən ilk ekran (/admin/satis) onları
+   bir-birinə yapışıq göstərdi, çünki heç kim üçüncü variantı yazmamışdı.
+   İndi qayda burada, bir dəfə.
+
+   `min-width: 0` vacibdir: flex uşağının standart `min-width: auto`-su geniş
+   cədvəli sıxılmağa qoymur və öz qabında sürüşmək əvəzinə səhifənin gövdəsini
+   üfüqi sürüşdürərdi (docs/rules.md §14). */
+.shellInner {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--space-9);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-11);
+}
+.shellInner > * { min-width: 0; }
+/* Dar ekranda sidebar üstə keçir və səhifə normal sürüşür — 100vh + daxili
+   sürüşmə mobil brauzerlərdə ünvan zolağı ilə vuruşur. */
+@media (max-width: 860px) {
+  .shell { flex-direction: column; height: auto; min-height: 100vh; overflow: visible; }
+  .shellScroll { overflow: visible; }
+  .shellInner { padding: var(--space-7); gap: var(--space-9); }
+}
+
+/* ——— Sidebar-dakı instans siyahısı ———
+   Sıra İKİ düymədir, biri o birinin içində deyil: soldakı nömrəni seçir,
+   sağdakı «ən yeni cavabsıza keç» edir. Prototip sayğacı seçim düyməsinin
+   İÇİNDƏ klikləyən span kimi çəkmişdi — görünüş eynidir, amma düymə içində
+   düymə nə klaviatura ilə çatılır, nə də ekran oxuyucusuna izah olunur. */
+/* Nömrə siyahısının qabı. Masaüstündə adi blokdur; telefonda naviqasiya
+   zolağının davamı olur (aşağıdakı media sorğusu) — sinif məhz onun üçün var,
+   qab sinifsiz qalanda siyahı zolağın içində sütun kimi qalıb onu üç dəfə
+   hündürləşdirirdi və nömrələr sıfır enə sıxılıb görünmür idi. */
+.instNav { display: block; }
+
+.instHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-8) var(--space-7) var(--space-3);
+}
+.instTotal {
+  font-family: var(--font-numeric);
+  font-size: var(--text-micro);
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+.instRow {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: var(--panel);
+}
+.instRow[data-on="true"] {
+  background: var(--panel-raised);
+  box-shadow: inset 0 -2px 0 var(--brand);
+}
+.instPick {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  flex: 1;
+  min-width: 0;
+  padding: 9px var(--space-7);
+  border: 0;
+  background: transparent;
+  color: var(--text-strong);
+  font-family: var(--font-ui);
+  text-align: start;
+  cursor: pointer;
+}
+.instRow:hover .instPick { color: var(--text-strong); }
+.instRow:hover { background: var(--panel-raised); }
+.instDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--text-faint);
+}
+.instRow[data-live="true"] .instDot { background: var(--brand); }
+.instText { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.instName {
+  font-size: var(--text-body-size);
+  font-weight: var(--weight-medium);
+  color: var(--text-body);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.instRow[data-on="true"] .instName {
+  font-weight: var(--weight-semibold);
+  color: var(--text-strong);
+}
+.instCount {
+  font-family: var(--font-numeric);
+  font-size: var(--text-micro);
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+.instJump {
+  flex: none;
+  margin-right: var(--space-7);
+  padding: 2px 8px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--critical);
+  color: #fff;
+  font-family: var(--font-numeric);
+  font-size: var(--text-tiny);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+.instJump:hover { filter: brightness(1.08); }
+
+/*
+ * Telefon: nömrə siyahısı da naviqasiya ilə eyni sırada sürüşür.
+ *
+ * Sıra çipə çevrilir: nöqtə, ad və cavabsız sayğacı qalır, «980 yazışma ·
+ * qoşulu» sətri isə düşür — çipdə ikinci sətir sıranı iki dəfə hündürləşdirir
+ * və eyni məlumat masaüstündə onsuz da var. Seçilmiş nömrənin alt reyi
+ * (inset kölgə) yerində qalır: rəng tək daşıyıcı deyil.
+ */
+@media (max-width: 860px) {
+  .instHead { display: none; }
+  .instNav {
+    flex-basis: 100%;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    overflow-x: auto;
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--line-soft);
+  }
+  .instRow {
+    width: auto;
+    flex: none;
+    border-radius: var(--radius-pill);
+    background: var(--panel-sunken);
+  }
+  .instPick { padding: 5px var(--space-5); }
+  .instCount { display: none; }
+  .instJump { margin-right: var(--space-4); }
+}
+
+/* ——— Kart şəbəkəsi ———
+   Nömrələr ekranı: bir satıcı bir kart, kartın içində onun nömrələri. */
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-7);
+}
+/* Kartın içindəki sıra-link. Ayırıcı YUXARIDADIR, aşağıda yox: sonuncu
+   sıradan sonra asılı qalan xətt kartın dibini iki dəfə çəkirdi. */
+.linkRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding: var(--space-4) 0;
+  border-top: 1px solid var(--line-soft);
+  text-decoration: none;
+  color: var(--text-strong);
+  font-size: var(--text-body-size);
+}
+.linkRow:hover { color: var(--brand); text-decoration: none; }
+.linkRowName { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ——— Gedişat zolağı ———
+   Lentin üstündəki nazik sətir: düymə solda, hesabat sağda. Panel deyil —
+   qab olsaydı, altındakı lentlə eyni çəkidə oxunardı. */
+.runBar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  flex-wrap: wrap;
+  padding: var(--space-5) var(--space-7);
+  background: var(--panel-sunken);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+}
+.runMeta { font-size: var(--text-tiny); color: var(--text-faint); }
+.runBusy {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  font-size: var(--text-small);
+  color: var(--text-body);
+}
+
+/* ——— Qlobal başlıq ———
+ *
+ * Ekranın kimliyi bir yerdədir: brend, axtarış, «N yeni», «yalnız oxu», tema
+ * və kimin hesabı olduğu. Əvvəl bunlar üç yerə səpələnmişdi — brend sidebar-ın
+ * başında, tema sidebar-ın altında, «yalnız oxu» səhifə başlığında, çıxış isə
+ * köhnə ekranlarda naviqasiya linkləri ilə eyni sinifdə. Nəticədə eyni sual
+ * («hansı hesabla, hansı rejimdəyəm?») ekrandan ekrana başqa yerdə cavab
+ * alırdı.
+ *
+ * Sol sütun sidebar ilə eyni enlidir: brend naviqasiyanın üstündə oturur,
+ * axtarış isə məzmunun sol kənarından başlayır. Sidebar-ı olmayan köhnə
+ * ekranlarda o sütun məzmuna görə daralır (data-align="page").
+ */
+.appHeader {
+  flex: none;
+  display: grid;
+  grid-template-columns: var(--sidebar-width) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-7);
+  height: 56px;
+  padding-right: var(--space-7);
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+}
+
+.appHeader[data-align="page"] {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.appBrand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  padding: 0 var(--space-7);
+  min-width: 0;
+  color: var(--text-strong);
+  text-decoration: none;
+}
+
+.appBrand:hover { text-decoration: none; }
+
+/* Nişan mətn deyil, işarədir: 26px-lik kvadratda tək hərf hər temada eyni
+   oxunur və başlığın sol kənarını sabit saxlayır. */
+.brandMark {
+  width: 26px;
+  height: 26px;
+  flex: none;
+  border-radius: var(--radius-sm);
+  background: var(--brand);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-tiny);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.02em;
+}
+
+.brandText { display: flex; align-items: baseline; gap: var(--space-4); min-width: 0; }
+
+.brandName {
+  font-size: var(--text-body-size);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-tight);
+}
+
+/* Ekranın adı brendin yanında, kiçik və böyük hərflərlə: «Katibe» sabitdir,
+   bu isə hansı bölmədə olduğunu deyir. */
+.brandSection {
+  font-size: var(--text-micro);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+.headerSearch {
+  min-width: 0;
+  max-width: 520px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.headerRight { display: flex; align-items: center; gap: var(--space-5); }
+
+/*
+ * «N yeni» — cavabı bizdə olan yazışmaların cəmi.
+ *
+ * Rəqəm qırmızıdır, yanındakı söz isə sakit: rəng tək daşıyıcı deyil, «yeni»
+ * sözü onu izah edir. Sidebar-dakı nömrə-üzrə sayğaclar yerində qalır — bu,
+ * onların cəmidir, əvəzi deyil.
+ */
+.newPill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 5px 10px 5px 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--panel-sunken);
+  color: var(--text-body);
+  font-family: var(--font-ui);
+  font-size: var(--text-tiny);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.newPill:hover { border-color: var(--line-strong, var(--line)); text-decoration: none; }
+
+.newPillCount {
+  font-family: var(--font-numeric);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--weight-semibold);
+  color: var(--critical);
+}
+
+.newPillLabel { color: var(--text-muted); }
+
+.headerRule { width: 1px; height: 22px; background: var(--line); flex: none; }
+
+.userChip { display: flex; align-items: center; gap: var(--space-4); min-width: 0; }
+
+.userAvatar {
+  width: 28px;
+  height: 28px;
+  flex: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--panel-raised);
+  border: 1px solid var(--line);
+  font-size: var(--text-tiny);
+  font-weight: var(--weight-semibold);
+  color: var(--text-muted);
+}
+
+.userLines { display: flex; flex-direction: column; min-width: 0; }
+
+.userName {
+  font-size: var(--text-tiny);
+  font-weight: var(--weight-semibold);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userRole {
+  font-size: var(--text-micro);
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+/*
+ * Telefon: başlıq iki sətrə bölünür — brend və hesab bir sətirdə, axtarış
+ * altında tam enində. 430px-lik ekranda üç sütun onsuz da yerləşmirdi, sıxılan
+ * axtarış isə yazmaq üçün yararsız olurdu.
+ */
+@media (max-width: 860px) {
+  .appHeader,
+  .appHeader[data-align="page"] {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    height: auto;
+    padding: var(--space-4) var(--space-6) var(--space-5);
+    gap: var(--space-5);
+  }
+
+  .appBrand { padding: 0; }
+
+  /* Axtarış ikinci sətri tam tutur. */
+  .headerSearch { grid-column: 1 / -1; max-width: none; }
+
+  /* Dar ekranda sağ qrup sarınır, kəsilmir: 360px-də hesab şəkilciyi kənarda
+     qalırdı. «Yalnız oxu» nişanı burada gizlədilə bilməz — telefonda sidebar-ın
+     altındakı blok onsuz da yoxdur, yəni məhsulun vədini daşıyan yeganə yer
+     budur (qayda 10). */
+  .headerRight {
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  /* Səhifə başlığı telefonda sarınır: düymələr öz sətrinə düşür, alt başlıq
+     isə tam eni alır. Bir sətirdə sıxılanda ondan yalnız iki söz qalırdı. */
+  .topbar { flex-wrap: wrap; padding: var(--space-5) var(--space-7); }
+  .topbarActions { flex-basis: 100%; margin-left: 0; justify-content: flex-start; }
+
+  /* Ad və rol sətri dar ekranda yer yeyir; şəkilcik kifayətdir. */
+  .userLines { display: none; }
+}

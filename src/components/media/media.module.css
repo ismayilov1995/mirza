@@ -1,0 +1,243 @@
+/*
+ * Fayl kitabxanasının öz stilləri.
+ *
+ * Qalereya panelin içindədir və panelin haşiyəsi, fonu, başlığı `Panel`-dən
+ * gəlir — burada yalnız kartların şəbəkəsi və kartın özü var. Rəng, ölçü və
+ * boşluq token-dəndir (docs/rules.md §2).
+ */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-6) var(--space-6);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+  margin: 0;
+}
+
+/*
+ * Açan element düymədir, ona görə əvvəlcə `border: 0` — brauzer düyməyə öz
+ * `2px outset` haşiyəsini verir və şəbəkə qutu-qutu görünür (docs/rules.md §5b).
+ */
+.thumb {
+  border: 0;
+  padding: 0;
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--panel-sunken);
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: box-shadow var(--duration-fast) var(--ease-standard);
+}
+
+.thumb:hover,
+.thumb:focus-visible {
+  box-shadow: var(--shadow-active-row);
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Şəkil olmayan fayl: ikon + tipin adı. Rəng tək daşıyıcı deyil (§3). */
+.glyph {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  text-align: center;
+  padding: var(--space-4);
+}
+
+.glyphWord {
+  font-size: var(--text-tiny);
+  color: var(--text-muted);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Videonun üstündəki oxu nişanı — «bu, oynadıla bilər» deməkdir. */
+.play {
+  position: absolute;
+  inset: auto var(--space-3) var(--space-3) auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--panel);
+  color: var(--text-body);
+  font-size: var(--text-tiny);
+  font-family: var(--font-numeric);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Faylı olmayan sətir sönük deyil, İZAHLIDIR: qutu boş qalmır. */
+.gone {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  text-align: center;
+  color: var(--text-faint);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-md);
+}
+
+.caption {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.chatLink {
+  font-size: var(--text-tiny);
+  color: var(--text-body);
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chatLink:hover {
+  color: var(--text-strong);
+  text-decoration: underline;
+}
+
+.meta {
+  font-size: var(--text-tiny);
+  color: var(--text-faint);
+  font-family: var(--font-numeric);
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.more {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-2) var(--space-6) var(--space-7);
+}
+
+/* ——— Süzgəc zolağı ——— */
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: auto;
+}
+
+.select {
+  height: 30px;
+  max-width: 220px;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--panel-raised);
+  color: var(--text-body);
+  font: inherit;
+  font-size: var(--text-tiny);
+}
+
+/* ——— Böyük baxış ——— */
+
+.viewer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.viewer img,
+.viewer video {
+  max-width: 100%;
+  max-height: 62vh;
+  border-radius: var(--radius-md);
+  background: var(--panel-sunken);
+}
+
+.viewer audio {
+  width: 100%;
+}
+
+.viewerCaption {
+  align-self: stretch;
+  font-size: var(--text-small);
+  color: var(--text-body);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.viewerNav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-right: auto;
+  font-size: var(--text-tiny);
+  color: var(--text-faint);
+  font-family: var(--font-numeric);
+  font-variant-numeric: tabular-nums;
+}
+
+/*
+ * Telefon sərhədi bir dənədir: 860px (docs/rules.md §14). Kartlar kiçilir,
+ * süzgəc forması isə tam enə keçir — gövdə üfüqi sürüşmür.
+ */
+@media (max-width: 860px) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+    gap: var(--space-3);
+    padding: var(--space-4);
+  }
+
+  .form {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .select {
+    flex: 1 1 140px;
+    max-width: none;
+  }
+}

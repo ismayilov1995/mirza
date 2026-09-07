@@ -1,0 +1,685 @@
+/*
+ * Söhbət ekranı — arxiv və nəzarət üçün eyni.
+ *
+ * Üç sütun: naviqasiya (səhifədən gəlir), söhbət/nəticə siyahısı, yazışma.
+ * Bütün hündürlüklər 100vh-dan paylanır və hər sütun ayrıca sürüşür — səhifə
+ * bütövlükdə sürüşsəydi, yazışmanın altına düşən adam siyahını da itirərdi.
+ */
+
+/*
+ * Kök: üstdə qlobal başlıq, altında naviqasiya + siyahı + yazışma.
+ *
+ * Hündürlük burada saxlanılır. Əvvəl `.shell` özü 100vh idi; qlobal başlıq
+ * onun üstünə gələndə ekran bir başlıq boyu aşağı sürüşürdü.
+ */
+.shellOuter {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  min-height: 0;
+  background: var(--canvas);
+  color: var(--text-body);
+  font-family: var(--font-ui);
+  font-size: var(--text-body-size);
+}
+
+.shell {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Sidebar-dan sağdakı sütun: ekranın adı, altında iki panel. */
+.shellMain {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.chatArea {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+/* ——— sol sütun ——— */
+.rail {
+  width: 372px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-right: 1px solid var(--line);
+  background: var(--panel);
+}
+.railHead {
+  padding: var(--space-8) var(--space-8) var(--space-6);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  flex: none;
+}
+.searchRow { display: flex; align-items: center; gap: var(--space-4); }
+.searchWrap { position: relative; flex: 1; min-width: 0; }
+.clearBtn {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: transparent;
+  color: var(--text-faint);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+}
+.clearBtn:hover { color: var(--text-strong); background: var(--panel-sunken); }
+.chipRow { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+.resetBtn {
+  border: none;
+  background: transparent;
+  color: var(--text-faint);
+  font-size: var(--text-tiny);
+  cursor: pointer;
+  padding: 2px 4px;
+  font-family: var(--font-ui);
+}
+.resetBtn:hover { color: var(--critical); }
+
+/* ——— filtr paneli ——— */
+.panel {
+  border-bottom: 1px solid var(--line);
+  background: var(--panel-sunken);
+  padding: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  max-height: 58vh;
+  overflow-y: auto;
+  flex: none;
+}
+.group { display: flex; flex-direction: column; gap: var(--space-4); }
+.groupHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+.label {
+  font-size: var(--text-micro);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  color: var(--text-faint);
+}
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
+.wrapRow { display: flex; gap: var(--space-3); flex-wrap: wrap; }
+.select {
+  width: 100%;
+  min-width: 0;
+  background: var(--panel-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 6px 8px;
+  color: var(--text-strong);
+  font-size: var(--text-small);
+  font-family: var(--font-ui);
+  outline: none;
+}
+.select:focus { border-color: var(--brand); }
+
+.cheat {
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-md);
+  padding: var(--space-6) var(--space-7);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.cheatRow { display: grid; grid-template-columns: 128px 1fr; gap: var(--space-5); align-items: baseline; }
+.code {
+  font-family: var(--font-numeric);
+  font-size: var(--text-tiny);
+  color: var(--brand);
+  background: var(--panel-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xs);
+  padding: 1px 5px;
+  justify-self: start;
+}
+.cheatWhat { font-size: var(--text-tiny); color: var(--text-muted); line-height: var(--leading-snug); }
+
+/* ——— nəticə başlığı ——— */
+.countBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding: var(--space-5) var(--space-8);
+  border-bottom: 1px solid var(--line-soft);
+  background: var(--panel-sunken);
+  flex: none;
+}
+.countText { font-size: var(--text-tiny); color: var(--text-muted); }
+.countNum {
+  font-family: var(--font-numeric);
+  color: var(--text-strong);
+  font-weight: var(--weight-semibold);
+}
+.sortGroup {
+  display: flex;
+  gap: var(--space-2);
+  background: var(--panel-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  padding: 2px;
+}
+.sortBtn {
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: var(--text-micro);
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text-muted);
+  font-weight: var(--weight-regular);
+}
+.sortBtn[data-active="true"] {
+  background: var(--brand);
+  color: var(--brand-ink);
+  font-weight: var(--weight-semibold);
+}
+
+/* ——— siyahı ——— */
+.list { flex: 1; overflow-y: auto; min-height: 0; }
+/*
+ * Siyahı sırası.
+ *
+ * `border: 0` təsadüfi deyil və silinməməlidir: bu bir <button>-dur, brauzer
+ * ona öz haşiyəsini verir (2px outset), və aşağıda yalnız border-bottom
+ * təyin etmək yuxarı/sağ/sol haşiyəni brauzerin ixtiyarında qoyurdu — sıralar
+ * düz siyahı yerinə qutu-qutu görünürdü.
+ *
+ * Seçili sıranın reyi də haşiyə deyil, KÖLGƏdir (--shadow-active-row): haşiyə
+ * yer tutur və seçim dəyişəndə mətn 2px sürüşürdü.
+ */
+.row {
+  padding: 11px 14px;
+  border: 0;
+  border-bottom: 1px solid var(--line-soft);
+  cursor: pointer;
+  background: transparent;
+  display: block;
+  width: 100%;
+  text-align: start;
+  font-family: var(--font-ui);
+  color: inherit;
+}
+.row:hover { background: var(--panel-raised); }
+.row[data-active="true"] {
+  background: var(--panel-raised);
+  box-shadow: var(--shadow-active-row);
+}
+
+.rowTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+}
+.rowName {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-width: 0;
+}
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--panel-raised);
+  border: 1px solid var(--line);
+  color: var(--text-muted);
+  font-size: var(--text-tiny);
+  font-weight: var(--weight-semibold);
+}
+.avatar[data-group="true"] { border-radius: var(--radius-sm); }
+.name {
+  font-size: var(--text-body-size);
+  font-weight: var(--weight-semibold);
+  color: var(--text-strong);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.stamp {
+  font-family: var(--font-numeric);
+  font-size: var(--text-tiny);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+/* Alt sətir avatarın altından yox, yanından başlayır: 32px avatar + 10px
+   boşluq. Rəqəm burada sabitdir, çünki avatar da sabitdir. */
+.rowBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-top: 3px;
+  padding-left: 42px;
+}
+.preview {
+  font-size: var(--text-small);
+  color: var(--text-faint);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Cavabsız söhbətdə önizləmə tündləşir — sıra siyahıda «diri» olanı
+   göstərməlidir. */
+.row[data-awaiting="true"] .preview { color: var(--text-body); }
+/* Oxunmamış sayğacı QIRMIZIDIR, brend yaşılı deyil: yaşıl bu panelde
+   «qaydasındadır» deməkdir və sayğac onun əksini deyir. */
+.unread {
+  font-family: var(--font-numeric);
+  font-size: var(--text-micro);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+  background: var(--critical);
+  border-radius: var(--radius-pill);
+  padding: 1px 6px;
+  min-width: 18px;
+  text-align: center;
+  flex: none;
+}
+.snippet {
+  font-size: var(--text-body-size);
+  color: var(--text-body);
+  line-height: var(--leading-snug);
+  margin-top: var(--space-3);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.hitMark {
+  background: color-mix(in srgb, var(--brand) 28%, transparent);
+  color: var(--text-strong);
+  border-radius: 2px;
+  padding: 0 1px;
+  font-weight: var(--weight-semibold);
+}
+.rowMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+  flex-wrap: wrap;
+}
+.who { font-size: var(--text-micro); color: var(--text-faint); }
+.pad { padding: var(--space-8); }
+
+/* ——— sağ sütun ——— */
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--canvas);
+}
+.thread {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--space-9) var(--space-11);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+.dayRow { display: flex; align-items: center; justify-content: center; padding: var(--space-4) 0; }
+.day {
+  font-size: var(--text-micro);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  color: var(--text-faint);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  padding: 3px 12px;
+}
+.jumped {
+  border-radius: var(--radius-lg);
+  outline: 1px solid var(--brand-line);
+  background: color-mix(in srgb, var(--brand) 7%, transparent);
+  padding: var(--space-3);
+  margin: calc(var(--space-3) * -1);
+}
+
+/* ——— baloncuq ——— */
+.bubbleRow { display: flex; justify-content: flex-start; }
+.bubbleRow[data-out="true"] { justify-content: flex-end; }
+.bubble {
+  position: relative;
+  max-width: min(78%, 560px);
+  border: 1px solid var(--bubble-in-line);
+  background: var(--bubble-in-bg);
+  border-radius: var(--radius-lg);
+  border-bottom-left-radius: 4px;
+  padding: 8px 12px;
+}
+.bubbleRow[data-out="true"] .bubble {
+  border-color: var(--bubble-out-line);
+  background: var(--bubble-out-bg);
+  border-bottom-left-radius: var(--radius-lg);
+  border-bottom-right-radius: 4px;
+}
+.sender {
+  font-size: var(--text-tiny);
+  font-weight: var(--weight-semibold);
+  color: var(--bubble-sender);
+  margin-bottom: 3px;
+}
+.attach {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: 4px;
+  padding: 3px 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--panel-sunken);
+  font-size: var(--text-small);
+  color: var(--info);
+  cursor: default;
+  font-family: var(--font-ui);
+  text-decoration: none;
+  max-width: 100%;
+}
+.attach[data-openable="true"] { cursor: pointer; }
+.attach[data-openable="true"]:hover { border-color: var(--brand); }
+.attachName { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.text {
+  font-size: var(--text-body-size);
+  color: var(--text-strong);
+  line-height: var(--leading-snug);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.voice {
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px dashed var(--line);
+  font-size: var(--text-small);
+  color: var(--text-body);
+  display: flex;
+  gap: var(--space-3);
+}
+.voice[data-missing="true"] { color: var(--text-faint); font-style: italic; }
+.time {
+  font-size: var(--text-micro);
+  color: var(--text-faint);
+  margin-top: 4px;
+  text-align: left;
+  font-family: var(--font-numeric);
+}
+.bubbleRow[data-out="true"] .time { text-align: right; }
+
+.mediaVisual {
+  display: block;
+  max-width: 100%;
+  max-height: 320px;
+  border-radius: var(--radius-md);
+  margin-bottom: 4px;
+  background: var(--panel-sunken);
+}
+.mediaAudio { display: block; width: 260px; max-width: 100%; margin-bottom: 4px; }
+
+/*
+ * Ulduz düyməsi baloncuğun kənarındadır və yalnız üstünə gələndə görünür.
+ *
+ * Yazışma oxunmaq üçündür; hər baloncuğun yanında daimi düymə mətni sıxışdırır.
+ * Klaviatura ilə gələndə də görünür (focus-visible) — yoxsa yalnız siçanla
+ * işləyən düymə olardı.
+ */
+.star {
+  position: absolute;
+  top: 2px;
+  right: -26px;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border: none;
+  background: transparent;
+  color: var(--text-faint);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-standard);
+}
+.bubbleRow[data-out="true"] .star { right: auto; left: -26px; }
+.bubble:hover .star,
+.star:focus-visible,
+.star[data-on="true"] { opacity: 1; }
+.star[data-on="true"] { color: var(--serious); }
+
+/* ——— composer ——— */
+.foot { border-top: 1px solid var(--line); background: var(--panel); flex: none; }
+.footNote {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-9) var(--space-3);
+  color: var(--text-faint);
+  font-size: var(--text-tiny);
+}
+.composer {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-5);
+  padding: 0 var(--space-9) var(--space-8);
+  opacity: 0.45;
+  pointer-events: none;
+  user-select: none;
+}
+.composerBox {
+  flex: 1;
+  min-width: 0;
+  resize: none;
+  background: var(--panel-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 10px 14px;
+  color: var(--text-strong);
+  font-size: var(--text-body-size);
+  font-family: var(--font-ui);
+  line-height: var(--leading-snug);
+  outline: none;
+}
+
+/* ——— media modalı ——— */
+.mediaItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-7);
+  padding: var(--space-6) var(--space-7);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--panel-sunken);
+  cursor: pointer;
+  width: 100%;
+  text-align: start;
+  font-family: var(--font-ui);
+  color: inherit;
+}
+.mediaItem:hover { border-color: var(--brand); }
+.mediaIcon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border-radius: var(--radius-sm);
+  background: var(--panel-raised);
+  border: 1px solid var(--line);
+  color: var(--info);
+}
+.mediaName {
+  font-size: var(--text-body-size);
+  color: var(--text-strong);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mediaMeta { font-size: var(--text-tiny); color: var(--text-faint); }
+
+.loading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-9);
+  color: var(--text-muted);
+  font-size: var(--text-small);
+}
+
+/* Dar ekranda iki sütun bir-birinin üstünə düşür: siyahı yuxarıda, yazışma
+   aşağıda. Telefon bu ekranın əsas cihazı deyil, amma açılanda işləməlidir. */
+@media (max-width: 860px) {
+  .shellOuter { height: auto; min-height: 100vh; }
+  .shell { flex-direction: column; }
+  .chatArea { flex-direction: column; }
+  .rail { width: 100%; border-right: none; border-bottom: 1px solid var(--line); max-height: 60vh; }
+  .thread { padding: var(--space-8) var(--space-6); }
+  .star { right: -4px; opacity: 1; }
+  .bubbleRow[data-out="true"] .star { left: -4px; right: auto; }
+}
+
+/* ——— «baxılıb / baxılmayıb» ——— */
+.readState {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  flex: none;
+  font-size: var(--text-micro);
+  padding: 1px 7px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--line);
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+/* Baxılmayan söhbət diqqət istəyir, baxılan isə sakit qeyddir — ona görə
+   biri kəhrəba haşiyəli, digəri sadəcə boz. */
+.readState[data-seen="false"] {
+  color: var(--serious);
+  border-color: color-mix(in srgb, var(--serious) 45%, var(--line));
+}
+
+/* Sıranın instans etiketi — kim danışır, sətrin altında, sakit tonda.
+   Böyük hərflər qəsdəndir: ad deyil, mənsubiyyətdir və başlıqla eyni çəkidə
+   oxunmamalıdır. */
+.rowLane {
+  margin-top: 3px;
+  padding-left: 42px;
+  font-size: var(--text-micro);
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Zolaq seçicisi və «yeni mesaja keç» bir sətirdə: ikisi də eyni sualın
+   hissəsidir — "hansı nömrə, və orada yenilik varmı?" */
+.laneRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+.laneRow .chipRow { flex: 1; min-width: 0; }
+/* Çipin içindəki cavabsız sayı — çipin öz rəngindən asılı olmayan sakit ton. */
+.laneCount {
+  font-family: var(--font-numeric);
+  font-size: var(--text-micro);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+  padding: 0 5px;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--critical) 16%, transparent);
+  color: var(--critical);
+}
+
+/* ——— Cavab konteksti ———
+ *
+ * «Bu mesaj nəyə cavabdır» sualı yazışmanı oxuyanın ən tez-tez verdiyi
+ * sualdır və panel indiyə qədər ona cavab vermirdi: cavab adi mesaj kimi
+ * görünürdü, kontekst isə oxucunun yaddaşında qalırdı.
+ *
+ * Sol rey rəngi istiqamətə görədir — bizim mesajımıza cavab brend rənglidir,
+ * müştərinin mesajına cavab sakit. Rəng tək daşıyıcı deyil: yanında «Biz» və
+ * ya göndərənin adı yazılır.
+ */
+.quote {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin-bottom: var(--space-4);
+  padding: var(--space-3) var(--space-5);
+  border-left: 3px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--panel-sunken);
+  min-width: 0;
+}
+
+.quote[data-out="true"] { border-left-color: var(--brand); }
+
+.quoteWho {
+  font-size: var(--text-micro);
+  font-weight: var(--weight-semibold);
+  color: var(--text-muted);
+}
+
+/* Sitat iki sətirdən uzun olmur: kontekst lazımdır, təkrar oxunuş yox. */
+.quoteText {
+  font-size: var(--text-small);
+  color: var(--text-muted);
+  line-height: var(--leading-snug);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Mətnin içindəki əməliyyat — link kimi görünür, amma naviqasiya deyil, ona
+   görə <button>-dur (dizayn qaydası 8: naviqasiya link, əməliyyat düymə). */
+.linkBtn {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: var(--brand);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* Seçilmiş nömrədən BAŞQA nömrələr — eyni sətirdə, amma sönük: onlar sətrin
+   rəqəmlərinə daxil deyil, sadəcə «bu söhbət başqa yerdə də davam edir»
+   deyir. */
+.rowLaneMore { color: var(--text-faint); }
