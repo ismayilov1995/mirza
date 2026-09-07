@@ -113,8 +113,14 @@ Redis-i default ayarlarla qaldırmaq kifayətdir.
 
 ### Addım 2 — Evolution API
 
+Yuxarı axındakı (`EvolutionAPI/evolution-api`) deyil, **bu fork** işlədilməlidir:
+içindəki dörd düzəlişdən üçü səssiz məlumat itkisinin qarşısını alır — deşifrə
+oluna bilməyən mesajların ümumiyyətlə yazılmaması, oxuna bilməyən sessiyanın
+yenisi ilə əvəzlənməsi (nömrənin qoşulmasının itməsi deməkdir) və uğursuz media
+yükləmələri. Fərqin izahı forkun kökündəki `LOKAL-DEYISIKLIKLER.md`-dədir.
+
 ```bash
-git clone <evolution-repo-ünvanı> evolution-api
+git clone https://github.com/ismayilov1995/evolution-api.git
 cd evolution-api
 npm install
 cp .env.example .env
@@ -152,7 +158,7 @@ npm run start:prod
 ### Addım 3 — Katibe
 
 ```bash
-git clone <katibe-repo-ünvanı> katibe-dashboard
+git clone https://github.com/ismayilov1995/mirza.git katibe-dashboard
 cd katibe-dashboard
 npm install
 cp .env.example .env.local
